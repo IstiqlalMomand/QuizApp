@@ -8,7 +8,7 @@ import java.awt.*;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Quiz App - Clickable Mockup");
+            JFrame frame = new JFrame("Quiz App");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(1280, 720);
             frame.setLocationRelativeTo(null);
