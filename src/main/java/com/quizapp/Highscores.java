@@ -1,8 +1,9 @@
 package com.quizapp;
 
+import com.quizapp.ui.components.PrimaryButton;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import com.quizapp.ui.components.PrimaryButton;
 import java.awt.*;
 
 public class Highscores {
@@ -18,10 +19,11 @@ public class Highscores {
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
 
+        // Content wrapper
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.setBackground(BG_COLOR);
-        content.setBorder(new EmptyBorder(40, 0, 0, 0));
+        content.setBorder(new EmptyBorder(40, 0, 40, 0));
 
         JLabel title = new JLabel("Highscores");
         title.setFont(new Font("Serif", Font.BOLD, 36));
@@ -38,8 +40,8 @@ public class Highscores {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                int w = getWidth() - 1;
-                int h = getHeight() - 1;
+                int w = getWidth();
+                int h = getHeight();
 
                 // shadow
                 g2.setColor(new Color(225, 225, 225));
@@ -58,16 +60,16 @@ public class Highscores {
         String[] cols = {"Rang", "Name", "Punkte"};
         Object[][] data = {
                 {"1", "Istiqlal", "120"},
-                {"2", "Anna", "110"},
-                {"3", "Max", "95"},
-                {"4", "Sara", "80"},
-                {"5", "Tom", "60"}
+                {"2", "Helal", "110"},
+                {"3", "Anna", "95"},
+                {"4", "Max", "80"},
+                {"5", "Sara", "60"}
         };
 
         JTable table = new JTable(data, cols) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // make table read-only
+                return false; // read-only table
             }
         };
         table.setRowHeight(36);
@@ -75,23 +77,26 @@ public class Highscores {
         table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
         table.setFillsViewportHeight(true);
 
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setBorder(BorderFactory.createEmptyBorder());
+        JScrollPane tableScroll = new JScrollPane(table);
+        tableScroll.setBorder(BorderFactory.createEmptyBorder());
 
-        card.add(scroll, BorderLayout.CENTER);
+        card.add(tableScroll, BorderLayout.CENTER);
 
         content.add(card);
         content.add(Box.createVerticalStrut(25));
-
 
         JButton back = new PrimaryButton("Zurück");
         back.setAlignmentX(Component.CENTER_ALIGNMENT);
         back.addActionListener(e -> onBack.run());
         content.add(back);
 
-        content.add(back);
+        // Page scroll wrapper (so nothing gets cut off on small windows)
+        JScrollPane pageScroll = new JScrollPane(content);
+        pageScroll.setBorder(null);
+        pageScroll.getVerticalScrollBar().setUnitIncrement(16);
+        pageScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        mainPanel.add(content, BorderLayout.CENTER);
+        mainPanel.add(pageScroll, BorderLayout.CENTER);
     }
 
     public JPanel getMainPanel() {

@@ -132,7 +132,7 @@ public class Quiz {
 
         contentBody.add(jokerPanel);
 
-        // ✅ BACK BUTTON (new)
+        // ✅ BACK BUTTON
         contentBody.add(Box.createVerticalStrut(25));
 
         JButton back = new PrimaryButton("Zurück");
@@ -145,7 +145,12 @@ public class Quiz {
 
         contentBody.add(backWrap);
 
-        mainPanel.add(contentBody, BorderLayout.CENTER);
+        JScrollPane scroll = new JScrollPane(contentBody);
+        scroll.setBorder(null);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        mainPanel.add(scroll, BorderLayout.CENTER);
     }
 
     // --- COMPONENTS ---

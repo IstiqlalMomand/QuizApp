@@ -81,7 +81,12 @@ public class Credits {
 
         content.add(back);
 
-        mainPanel.add(content, BorderLayout.CENTER);
+        JScrollPane scroll = new JScrollPane(content);
+        scroll.setBorder(null);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        mainPanel.add(scroll, BorderLayout.CENTER);
     }
 
     public JPanel getMainPanel() {

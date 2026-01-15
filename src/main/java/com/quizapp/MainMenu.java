@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MainMenu {
-    private JPanel mainPanel;
+    private final JPanel mainPanel;
 
     private final Runnable onStartQuiz;
     private final Runnable onOpenHighscores;
@@ -16,7 +16,7 @@ public class MainMenu {
     private final Runnable onOpenAdmin;
 
     // --- COLORS ---
-    private static final Color BG_COLOR = new Color(250, 251, 252);     // light background
+    private static final Color BG_COLOR = new Color(250, 251, 252);
     private static final Color ACCENT_BLUE = new Color(167, 191, 222);
     private static final Color ACCENT_RED = new Color(230, 92, 85);
     private static final Color ACCENT_YELLOW = new Color(245, 215, 66);
@@ -43,13 +43,14 @@ public class MainMenu {
         JPanel contentBox = new JPanel();
         contentBox.setLayout(new BoxLayout(contentBox, BoxLayout.Y_AXIS));
         contentBox.setBackground(BG_COLOR);
-        contentBox.setBorder(new EmptyBorder(50, 0, 0, 0));
+        contentBox.setBorder(new EmptyBorder(50, 0, 40, 0));
 
         // Title
         JLabel title = new JLabel("Hauptmenü");
         title.setFont(new Font("Serif", Font.BOLD, 36));
         title.setForeground(TEXT_DARK);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         contentBox.add(title);
         contentBox.add(Box.createVerticalStrut(40));
 
@@ -93,8 +94,8 @@ public class MainMenu {
 
         contentBox.add(grid);
 
-        // 2) CREDITS
-        contentBox.add(Box.createVerticalStrut(40)); // spacing after grid
+        // 2) CREDITS LINK
+        contentBox.add(Box.createVerticalStrut(40));
 
         JPanel creditsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         creditsPanel.setBackground(BG_COLOR);
@@ -115,9 +116,15 @@ public class MainMenu {
         creditsPanel.add(credits);
         contentBox.add(creditsPanel);
 
-        contentBox.add(Box.createVerticalStrut(30)); // bottom spacing
+        contentBox.add(Box.createVerticalStrut(30));
 
-        mainPanel.add(contentBox, BorderLayout.CENTER);
+        // ✅ SCROLL WRAPPER (wrap the correct panel: contentBox)
+        JScrollPane pageScroll = new JScrollPane(contentBox);
+        pageScroll.setBorder(null);
+        pageScroll.getVerticalScrollBar().setUnitIncrement(16);
+        pageScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        mainPanel.add(pageScroll, BorderLayout.CENTER);
     }
 
     private JPanel createCard(String title, String desc, String icon, Color accent, Runnable onClick) {
@@ -151,7 +158,7 @@ public class MainMenu {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(242, 242, 242)); // light gray circle
+                g2.setColor(new Color(242, 242, 242));
                 g2.fillOval(0, 0, getWidth(), getHeight());
             }
         };
