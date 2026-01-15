@@ -1,41 +1,56 @@
+package com.quizapp;
+
+import com.quizapp.ui.components.HeaderBar;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
-        // Swing GUI auf dem Event-Thread starten
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Quiz App - Clickable Mockup");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1100, 800);
+            frame.setSize(1280, 720);
             frame.setLocationRelativeTo(null);
+            frame.setLayout(new BorderLayout());
 
-            // Container mit CardLayout (wie ein Stapel Karten)
-            JPanel cards = new JPanel(new CardLayout());
+            HeaderBar headerBar = new HeaderBar("QuizApp");
+            headerBar.setUsername("Istiqlal");
 
-            // --- NAVIGATIONSLOGIK ---
-            // Wir definieren Aktionen für den Wechsel
-            Runnable showQuiz = () -> {
-                CardLayout cl = (CardLayout) cards.getLayout();
-                cl.show(cards, "QUIZ");
-            };
+            CardLayout cardLayout = new CardLayout();
+            JPanel cardPanel = new JPanel(cardLayout);
 
-            Runnable showMenu = () -> {
-                CardLayout cl = (CardLayout) cards.getLayout();
-                cl.show(cards, "MENU");
-            };
+            // Pages
+            Quiz quizPage = new Quiz(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
+            Highscores highscoresPage = new Highscores(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
+            Credits creditsPage = new Credits(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
+            TimeMode timeModePage = new TimeMode(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
+            Admin adminPage = new Admin(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
 
-            // --- ANSICHTEN ERSTELLEN ---
-            // Wir übergeben die Navigations-Befehle an die Klassen
-            MainMenu menuView = new MainMenu(showQuiz);
-            Quiz quizView = new Quiz(showMenu);
+            // Main menu with 5 actions
+            MainMenu mainMenu = new MainMenu(
+                    () -> cardLayout.show(cardPanel, "QUIZ"),
+                    () -> cardLayout.show(cardPanel, "HIGHSCORES"),
+                    () -> cardLayout.show(cardPanel, "CREDITS"),
+                    () -> cardLayout.show(cardPanel, "TIME_MODE"),
+                    () -> cardLayout.show(cardPanel, "ADMIN")
+            );
 
-            // Ansichten zum Stapel hinzufügen
-            cards.add(menuView.getMainPanel(), "MENU");
-            cards.add(quizView.getMainPanel(), "QUIZ");
+            // Add to CardLayout
+            cardPanel.add(mainMenu.getMainPanel(), "MAIN_MENU");
+            cardPanel.add(quizPage.getMainPanel(), "QUIZ");
+            cardPanel.add(highscoresPage.getMainPanel(), "HIGHSCORES");
+            cardPanel.add(creditsPage.getMainPanel(), "CREDITS");
+            cardPanel.add(timeModePage.getMainPanel(), "TIME_MODE");
+            cardPanel.add(adminPage.getMainPanel(), "ADMIN");
 
-            // Frame zusammenbauen
-            frame.add(cards);
+            headerBar.onLogout(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
+            headerBar.onHome(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
+
+            frame.add(headerBar, BorderLayout.NORTH);
+            frame.add(cardPanel, BorderLayout.CENTER);
+
+            cardLayout.show(cardPanel, "MAIN_MENU");
             frame.setVisible(true);
         });
     }
