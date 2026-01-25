@@ -1,4 +1,4 @@
-package com.quizapp.ui.components;
+package com.quizapp.view.components;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

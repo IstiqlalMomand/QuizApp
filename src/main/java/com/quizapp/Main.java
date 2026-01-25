@@ -1,6 +1,7 @@
 package com.quizapp;
 
-import com.quizapp.ui.components.HeaderBar;
+import com.quizapp.view.components.HeaderBar;
+import com.quizapp.view.*;
 
 import javax.swing.*;
 import java.awt.*;

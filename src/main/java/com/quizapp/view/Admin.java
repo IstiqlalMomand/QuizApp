@@ -1,6 +1,6 @@
-package com.quizapp;
+package com.quizapp.view;
 
-import com.quizapp.ui.components.PrimaryButton;
+import com.quizapp.view.components.PrimaryButton;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
