@@ -1,6 +1,6 @@
 package com.quizapp;
 
-import com.quizapp.view.components.HeaderBar; // ✅ FIXED IMPORT
+import com.quizapp.view.components.HeaderBar;
 import com.quizapp.view.*;
 
 import javax.swing.*;
@@ -18,7 +18,7 @@ public class Main {
             HeaderBar headerBar = new HeaderBar("QuizApp");
             headerBar.setUsername("-");
 
-            // ✅ State to hold current user
+            // State to hold current user
             final String[] currentUser = { "Gast" };
 
             CardLayout cardLayout = new CardLayout();
@@ -43,23 +43,29 @@ public class Main {
             TimeMode timeModePage = new TimeMode(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
             Admin adminPage = new Admin(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
 
-            // ✅ Update MainMenu with logic to start game with username
-            // ✅ Update MainMenu to REFRESH highscores when clicked
             MainMenu mainMenu = new MainMenu(
-                    () -> cardLayout.show(cardPanel, "QUIZ"),
+                    // 1. Classic Quiz Action
                     () -> {
-                        highscoresPage.refresh(); // <--- THIS RELOADS THE DATA
+                        quizPage.startGame(currentUser[0]); // Start game with user
+                        cardLayout.show(cardPanel, "QUIZ");
+                    },
+                    // 2. Highscores Action
+                    () -> {
+                        highscoresPage.refresh(); // Refresh data
                         cardLayout.show(cardPanel, "HIGHSCORES");
                     },
+                    // 3. Credits Action
                     () -> cardLayout.show(cardPanel, "CREDITS"),
+                    // 4. Time Mode Action
                     () -> {
-                        timeModePage.startGame(currentUser[0]);
+                        timeModePage.startGame(currentUser[0]); // Start game with user
                         cardLayout.show(cardPanel, "TIME_MODE");
                     },
+                    // 5. Admin Action
                     () -> cardLayout.show(cardPanel, "ADMIN")
             );
 
-            // --- Add cards ---
+            // --- Add cards (Standard setup) ---
             cardPanel.add(loginPage.getMainPanel(), "LOGIN");
             cardPanel.add(mainMenu.getMainPanel(), "MAIN_MENU");
             cardPanel.add(quizPage.getMainPanel(), "QUIZ");
