@@ -1,0 +1,32 @@
+[
+  {
+    "text": "Was ist das Hauptziel des \u0027Waterfall Model\u0027?",
+    "options": [
+      "Lineare Phasenabfolge",
+      "Iterative Entwicklung",
+      "Rapid Prototyping",
+      "Kundenkollaboration"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Was ist ein \u0027Stakeholder\u0027?",
+    "options": [
+      "Server-Admin",
+      "Interessengruppe",
+      "Entwickler",
+      "Aktionär"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Wofür steht SDLC?",
+    "options": [
+      "System Design Logic",
+      "Software Development Life Cycle",
+      "Secure Data Link",
+      "None"
+    ],
+    "correctIndex": 1
+  }
+]
