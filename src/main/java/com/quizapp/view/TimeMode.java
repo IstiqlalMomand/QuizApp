@@ -2,7 +2,6 @@ package com.quizapp.view;
 
 import com.quizapp.data.DataManager;
 import com.quizapp.model.Question;
-import com.quizapp.view.components.HeaderBar; // Adjust if your HeaderBar is elsewhere
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -15,7 +14,11 @@ public class TimeMode {
     private final JPanel mainPanel;
     private final Runnable onBack;
 
+    private String currentUsername = "Gast"; // Default
+
     // --- COLORS ---
+    private static final Color ERROR_BG = new Color(255, 230, 230); // Light Red
+    private static final Color ERROR_BORDER = new Color(255, 100, 100); // Red
     private static final Color HEADER_BG = new Color(13, 44, 94);
     private static final Color BG_COLOR   = new Color(250, 251, 252);
     private static final Color TEXT_DARK  = new Color(33, 37, 41);
@@ -28,19 +31,16 @@ public class TimeMode {
     private static final Color OK_BG       = new Color(233, 245, 234);
     private static final Color ALERT_BG    = new Color(250, 226, 226);
     private static final Color ALERT_TEXT  = new Color(170, 60, 60);
-
-    // Joker colors
     private static final Color JOKER_RING_PURPLE = new Color(225, 200, 255);
     private static final Color JOKER_TEXT_PURPLE = new Color(120, 50, 180);
     private static final Color SKIP_RING_TEAL = new Color(180, 240, 230);
     private static final Color SKIP_TEXT_TEAL = new Color(0, 150, 130);
 
     // --- GAME STATE ---
-    private List<Question> questions; // Now using com.quizapp.model.Question
+    private List<Question> questions;
     private int questionIndex = 0;
     private int score = 0;
     private static final int SECONDS_PER_QUESTION = 20;
-
     private boolean used5050 = false;
     private boolean acceptingAnswers = true;
 
@@ -57,14 +57,12 @@ public class TimeMode {
 
     public TimeMode(Runnable onBack) {
         this.onBack = onBack;
-
-        // Load real data
-        DataManager.ensureQuestionsExist(); // Create dummy data if file is missing
+        // Load data but DO NOT start yet
+        DataManager.ensureQuestionsExist();
         this.questions = DataManager.loadQuestions();
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
-
         mainPanel.add(buildStatusBar(), BorderLayout.NORTH);
 
         JPanel center = new JPanel();
@@ -97,12 +95,24 @@ public class TimeMode {
         pageScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         mainPanel.add(pageScroll, BorderLayout.CENTER);
+    }
 
-        if (!questions.isEmpty()) {
-            loadQuestion(0);
-        } else {
-            JOptionPane.showMessageDialog(mainPanel, "Keine Fragen gefunden!");
+    // Call this when entering the screen
+    public void startGame(String username) {
+        this.currentUsername = username;
+        this.score = 0;
+        this.questionIndex = 0;
+        this.used5050 = false;
+
+        // Reload questions to ensure freshness
+        this.questions = DataManager.loadQuestions();
+        if (this.questions.isEmpty()) {
+            JOptionPane.showMessageDialog(mainPanel, "Keine Fragen vorhanden!");
+            onBack.run();
+            return;
         }
+
+        loadQuestion(0);
     }
 
     private JPanel buildStatusBar() {
@@ -146,7 +156,7 @@ public class TimeMode {
         JLabel qLabel = new JLabel("FRAGE", SwingConstants.RIGHT);
         qLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
         qLabel.setForeground(Color.GRAY);
-        questionCounterValue = new JLabel("1 / " + questions.size(), SwingConstants.RIGHT);
+        questionCounterValue = new JLabel("1 / -", SwingConstants.RIGHT);
         questionCounterValue.setFont(new Font("SansSerif", Font.BOLD, 26));
         questionCounterValue.setForeground(TEXT_DARK);
         right.add(qLabel);
@@ -176,7 +186,7 @@ public class TimeMode {
         card.setOpaque(false);
         card.setPreferredSize(new Dimension(980, 220));
         card.setBorder(new EmptyBorder(25, 50, 25, 40));
-        questionLabel = new JLabel("—");
+        questionLabel = new JLabel("Willkommen");
         questionLabel.setFont(new Font("Serif", Font.BOLD, 34));
         questionLabel.setForeground(TEXT_DARK);
         alertPanel = new JPanel(new BorderLayout());
@@ -249,6 +259,7 @@ public class TimeMode {
         alertPanel.setVisible(false);
         questionCounterValue.setText((index + 1) + " / " + questions.size());
         pointsValue.setText(String.valueOf(score));
+
         acceptingAnswers = true;
         for (int i = 0; i < 4; i++) {
             answerOptions[i].setText(q.getOptions()[i]);
@@ -305,21 +316,25 @@ public class TimeMode {
         Question q = questions.get(questionIndex);
 
         if (idx == q.getCorrectIndex()) {
-            // === IMPLEMENTING THE "SHOULD" REQUIREMENT: BONUS POINTS ===
-            // Base: 10 points
-            // Bonus: 1 point per remaining second
+            // Correct Answer Logic
             int remainingSec = (int)(timerBar.getValue() / 1000);
             int earned = 10 + remainingSec;
-
             score += earned;
             pointsValue.setText(String.valueOf(score));
+        } else {
+            // Wrong Answer Logic -> Turn Red
+            answerOptions[idx].setState(AnswerOption.State.WRONG);
         }
 
+        // Always show Correct Answer in Green
+        answerOptions[q.getCorrectIndex()].setState(AnswerOption.State.CORRECT);
+
         for (int i = 0; i < 4; i++) {
-            if (i == q.getCorrectIndex()) answerOptions[i].setState(AnswerOption.State.CORRECT);
-            else answerOptions[i].setEnabledLook(false);
+            if (i != q.getCorrectIndex() && i != idx) {
+                answerOptions[i].setEnabledLook(false);
+            }
         }
-        startDelayTransition(800);
+        startDelayTransition(1500);
     }
 
     private void startDelayTransition(int delayMs) {
@@ -334,11 +349,8 @@ public class TimeMode {
     private void nextQuestion() {
         if (questionIndex + 1 >= questions.size()) {
             stopTimer();
-            // === IMPLEMENTING THE "MUST" REQUIREMENT: SAVE HIGHSCORE ===
-            // For now we use "Player" as name. In a real app, you pass the username from Login.
-            DataManager.saveHighscore("Player", score);
-
-            JOptionPane.showMessageDialog(mainPanel, "Time-Mode beendet!\nPunkte: " + score + "\nErgebnis gespeichert!");
+            DataManager.saveHighscore(currentUsername, score);
+            JOptionPane.showMessageDialog(mainPanel, "Time-Mode beendet!\nPunkte: " + score + "\nErgebnis für " + currentUsername + " gespeichert!");
             onBack.run();
             return;
         }
@@ -358,10 +370,8 @@ public class TimeMode {
 
     public JPanel getMainPanel() { return mainPanel; }
 
-    // --- INNER CLASSES FOR UI ---
     static class CircularButton extends JPanel {
-        private Runnable onClick;
-        private boolean enabledLook = true;
+        private Runnable onClick; private boolean enabledLook = true;
         CircularButton(String symbol, String label, Color ringColor, Color textColor) {
             setLayout(new BorderLayout()); setOpaque(false);
             JPanel circle = new JPanel() {
@@ -389,7 +399,8 @@ public class TimeMode {
     }
 
     static class AnswerOption extends JPanel {
-        enum State { NORMAL, CORRECT }
+        enum State { NORMAL, CORRECT, WRONG }
+
         private Runnable onClick; private State state = State.NORMAL; private boolean enabledLook = true;
         private final JLabel prefixLabel; private final JLabel textLabel;
         AnswerOption(String prefix) {
@@ -403,14 +414,29 @@ public class TimeMode {
         void setOnClick(Runnable r) { this.onClick = r; }
         void setState(State s) { this.state = s; repaint(); }
         void setEnabledLook(boolean enabled) { this.enabledLook = enabled; repaint(); }
+
         @Override protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g; g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             int w = getWidth() - 1; int h = getHeight() - 1;
             g2.setColor(new Color(220, 220, 220)); g2.fillRoundRect(2, 2, w, h, 20, 20);
-            if (state == State.CORRECT) g2.setColor(OK_BG); else g2.setColor(Color.WHITE);
+
+            // Background Colors
+            if (state == State.CORRECT) g2.setColor(OK_BG);
+            else if (state == State.WRONG) g2.setColor(ERROR_BG);
+            else g2.setColor(Color.WHITE);
             g2.fillRoundRect(0, 0, w, h, 20, 20);
-            if (state == State.CORRECT) { g2.setColor(OK_BORDER); g2.setStroke(new BasicStroke(2)); }
-            else { g2.setColor(enabledLook ? new Color(230, 230, 230) : new Color(245, 245, 245)); g2.setStroke(new BasicStroke(1)); }
+
+            // Borders
+            if (state == State.CORRECT) {
+                g2.setColor(OK_BORDER);
+                g2.setStroke(new BasicStroke(2));
+            } else if (state == State.WRONG) {
+                g2.setColor(ERROR_BORDER);
+                g2.setStroke(new BasicStroke(2));
+            } else {
+                g2.setColor(enabledLook ? new Color(230, 230, 230) : new Color(245, 245, 245));
+                g2.setStroke(new BasicStroke(1));
+            }
             g2.drawRoundRect(0, 0, w, h, 20, 20);
         }
     }

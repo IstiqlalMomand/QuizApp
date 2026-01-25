@@ -28,5 +28,75 @@
       "None"
     ],
     "correctIndex": 1
+  },
+  {
+    "text": "Dies ist Frage Nummer 4 (Platzhalter)",
+    "options": [
+      "Richtige Antwort A",
+      "Falsche Antwort B",
+      "Falsche Antwort C",
+      "Falsche Antwort D"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Dies ist Frage Nummer 5 (Platzhalter)",
+    "options": [
+      "Richtige Antwort A",
+      "Falsche Antwort B",
+      "Falsche Antwort C",
+      "Falsche Antwort D"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Dies ist Frage Nummer 6 (Platzhalter)",
+    "options": [
+      "Richtige Antwort A",
+      "Falsche Antwort B",
+      "Falsche Antwort C",
+      "Falsche Antwort D"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Dies ist Frage Nummer 7 (Platzhalter)",
+    "options": [
+      "Richtige Antwort A",
+      "Falsche Antwort B",
+      "Falsche Antwort C",
+      "Falsche Antwort D"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Dies ist Frage Nummer 8 (Platzhalter)",
+    "options": [
+      "Richtige Antwort A",
+      "Falsche Antwort B",
+      "Falsche Antwort C",
+      "Falsche Antwort D"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Dies ist Frage Nummer 9 (Platzhalter)",
+    "options": [
+      "Richtige Antwort A",
+      "Falsche Antwort B",
+      "Falsche Antwort C",
+      "Falsche Antwort D"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Dies ist Frage Nummer 10 (Platzhalter)",
+    "options": [
+      "Richtige Antwort A",
+      "Falsche Antwort B",
+      "Falsche Antwort C",
+      "Falsche Antwort D"
+    ],
+    "correctIndex": 0
   }
 ]

@@ -1,6 +1,6 @@
 package com.quizapp;
 
-import com.quizapp.view.components.HeaderBar;
+import com.quizapp.view.components.HeaderBar; // ✅ FIXED IMPORT
 import com.quizapp.view.*;
 
 import javax.swing.*;
@@ -18,12 +18,16 @@ public class Main {
             HeaderBar headerBar = new HeaderBar("QuizApp");
             headerBar.setUsername("-");
 
+            // ✅ State to hold current user
+            final String[] currentUser = { "Gast" };
+
             CardLayout cardLayout = new CardLayout();
             JPanel cardPanel = new JPanel(cardLayout);
 
             // --- Pages ---
-            // Login page sets username and enters main menu
             Login loginPage = new Login(username -> {
+                currentUser[0] = username; // Store user
+
                 headerBar.setUsername(username);
                 frame.add(headerBar, BorderLayout.NORTH); // show header after login
                 frame.revalidate();
@@ -32,20 +36,28 @@ public class Main {
                 cardLayout.show(cardPanel, "MAIN_MENU");
             });
 
-            // You can keep your existing constructors
-            MainMenu mainMenu = new MainMenu(
-                    () -> cardLayout.show(cardPanel, "QUIZ"),
-                    () -> cardLayout.show(cardPanel, "HIGHSCORES"),
-                    () -> cardLayout.show(cardPanel, "CREDITS"),
-                    () -> cardLayout.show(cardPanel, "TIME_MODE"),
-                    () -> cardLayout.show(cardPanel, "ADMIN")
-            );
-
+            // Initialize Pages
             Quiz quizPage = new Quiz(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
             Highscores highscoresPage = new Highscores(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
             Credits creditsPage = new Credits(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
             TimeMode timeModePage = new TimeMode(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
             Admin adminPage = new Admin(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
+
+            // ✅ Update MainMenu with logic to start game with username
+            // ✅ Update MainMenu to REFRESH highscores when clicked
+            MainMenu mainMenu = new MainMenu(
+                    () -> cardLayout.show(cardPanel, "QUIZ"),
+                    () -> {
+                        highscoresPage.refresh(); // <--- THIS RELOADS THE DATA
+                        cardLayout.show(cardPanel, "HIGHSCORES");
+                    },
+                    () -> cardLayout.show(cardPanel, "CREDITS"),
+                    () -> {
+                        timeModePage.startGame(currentUser[0]);
+                        cardLayout.show(cardPanel, "TIME_MODE");
+                    },
+                    () -> cardLayout.show(cardPanel, "ADMIN")
+            );
 
             // --- Add cards ---
             cardPanel.add(loginPage.getMainPanel(), "LOGIN");
@@ -67,6 +79,7 @@ public class Main {
 
             // Logout = back to login + hide header again
             headerBar.onLogout(() -> {
+                currentUser[0] = "Gast";
                 headerBar.setUsername("-");
                 frame.remove(headerBar);
                 frame.revalidate();
@@ -75,6 +88,9 @@ public class Main {
                 cardLayout.show(cardPanel, "LOGIN");
                 loginPage.focusUsername();
             });
+
+            // Home button
+            headerBar.onHome(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
         });
     }
 }

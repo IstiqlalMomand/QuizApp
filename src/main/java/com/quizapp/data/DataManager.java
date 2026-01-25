@@ -64,16 +64,27 @@ public class DataManager {
         }
     }
 
-    // Helper to verify we have dummy questions if file is empty
+    // ✅ UPDATED: Generates 10 questions if file is missing
     public static void ensureQuestionsExist() {
         List<Question> current = loadQuestions();
         if (current.isEmpty()) {
+            // 1. Real Question
             saveQuestion(new Question("Was ist das Hauptziel des 'Waterfall Model'?",
                     new String[]{"Lineare Phasenabfolge", "Iterative Entwicklung", "Rapid Prototyping", "Kundenkollaboration"}, 0));
+
+            // 2. Real Question
             saveQuestion(new Question("Was ist ein 'Stakeholder'?",
                     new String[]{"Server-Admin", "Interessengruppe", "Entwickler", "Aktionär"}, 1));
+
+            // 3. Real Question
             saveQuestion(new Question("Wofür steht SDLC?",
                     new String[]{"System Design Logic", "Software Development Life Cycle", "Secure Data Link", "None"}, 1));
+
+            // 4-10. Filler Questions (To reach 10)
+            for (int i = 4; i <= 10; i++) {
+                saveQuestion(new Question("Dies ist Frage Nummer " + i + " (Platzhalter)",
+                        new String[]{"Richtige Antwort A", "Falsche Antwort B", "Falsche Antwort C", "Falsche Antwort D"}, 0));
+            }
         }
     }
 }
