@@ -98,19 +98,28 @@ public class Quiz {
         mainPanel.add(scroll, BorderLayout.CENTER);
     }
 
-    // ✅ Start Game Logic (Reset Score & Load Questions)
+    // ✅ NEW: Picks 10 random questions instead of ALL of them
     public void startGame(String username) {
         this.currentUsername = username;
         this.score = 0;
         this.questionIndex = 0;
         this.used5050 = false;
 
-        this.questions = DataManager.loadQuestions();
-        if (questions.isEmpty()) {
+        // 1. Load ALL questions
+        List<Question> allQuestions = DataManager.loadQuestions();
+
+        if (allQuestions.isEmpty()) {
             JOptionPane.showMessageDialog(mainPanel, "Keine Fragen gefunden!");
             onBackToMenu.run();
             return;
         }
+
+        // 2. Shuffle them to randomize the order
+        java.util.Collections.shuffle(allQuestions);
+
+        // 3. Select only the first 10 (or less if we don't have 10 yet)
+        int limit = Math.min(allQuestions.size(), 10);
+        this.questions = allQuestions.subList(0, limit);
 
         loadQuestion(0);
     }
