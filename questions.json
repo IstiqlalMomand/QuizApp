@@ -98,5 +98,15 @@
       "Falsche Antwort D"
     ],
     "correctIndex": 0
+  },
+  {
+    "text": "Welches Schlüsselwort wird verwendet, um eine Klasse zu vererben?",
+    "options": [
+      "extends",
+      "implements",
+      "inherits",
+      "super"
+    ],
+    "correctIndex": 0
   }
 ]
