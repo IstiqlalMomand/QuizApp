@@ -87,4 +87,20 @@ public class DataManager {
             }
         }
     }
+    //  Added for Report Requirement 2.2.2 (Blackbox Test)
+    public static java.util.List<HighscoreEntry> getUserHighscores(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return new ArrayList<>(); // Empty list for invalid input
+        }
+
+        List<HighscoreEntry> all = loadHighscores();
+        List<HighscoreEntry> userOnly = new ArrayList<>();
+
+        for (HighscoreEntry entry : all) {
+            if (entry.getPlayerName().equalsIgnoreCase(username)) {
+                userOnly.add(entry);
+            }
+        }
+        return userOnly;
+    }
 }

@@ -108,5 +108,25 @@
       "super"
     ],
     "correctIndex": 0
+  },
+  {
+    "text": "JUnit Test Frage?",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "JUnit Test Frage?",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "correctIndex": 0
   }
 ]
