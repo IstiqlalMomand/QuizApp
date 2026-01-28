@@ -19,7 +19,7 @@ A comprehensive Java Swing Quiz Application developed for the "Software Engineer
 * **Input Validation:** Ensures no empty questions are saved.
 
 ### 💾 Data Persistence
-* **JSON Storage:** Uses `Gson` to store questions and highscores in local files (`questions_v2.json` and `highscores.json`).
+* **JSON Storage:** Uses `Gson` to store questions and highscores in local files (`questions.json` and `highscores.json`).
 * **Dynamic Loading:** The game automatically shuffles and picks 10 random questions from the pool every time a new game starts.
 
 ---
