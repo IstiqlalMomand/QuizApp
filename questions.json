@@ -1,106 +1,116 @@
 [
   {
-    "text": "Was ist das Hauptziel des \u0027Waterfall Model\u0027?",
+    "text": "Welcher Datentyp speichert Text in Java?",
     "options": [
-      "Lineare Phasenabfolge",
-      "Iterative Entwicklung",
-      "Rapid Prototyping",
-      "Kundenkollaboration"
-    ],
-    "correctIndex": 0
-  },
-  {
-    "text": "Was ist ein \u0027Stakeholder\u0027?",
-    "options": [
-      "Server-Admin",
-      "Interessengruppe",
-      "Entwickler",
-      "Aktionär"
+      "int",
+      "String",
+      "boolean",
+      "char"
     ],
     "correctIndex": 1
   },
   {
-    "text": "Wofür steht SDLC?",
+    "text": "Wie beendet man eine Schleife vorzeitig?",
     "options": [
-      "System Design Logic",
-      "Software Development Life Cycle",
-      "Secure Data Link",
-      "None"
+      "stop",
+      "exit",
+      "break",
+      "return"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist die Größe eines \u0027int\u0027 in Java?",
+    "options": [
+      "32 Bit",
+      "16 Bit",
+      "64 Bit",
+      "8 Bit"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Welches Schlüsselwort erstellt ein Objekt?",
+    "options": [
+      "create",
+      "make",
+      "init",
+      "new"
+    ],
+    "correctIndex": 3
+  },
+  {
+    "text": "Was ist das Standard-Package in Java?",
+    "options": [
+      "java.lang",
+      "java.util",
+      "java.io",
+      "java.awt"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Welche Methode ist der Einstiegspunkt?",
+    "options": [
+      "start",
+      "main",
+      "run",
+      "init"
     ],
     "correctIndex": 1
   },
   {
-    "text": "Dies ist Frage Nummer 4 (Platzhalter)",
+    "text": "Wie kommentiert man eine einzelne Zeile?",
     "options": [
-      "Richtige Antwort A",
-      "Falsche Antwort B",
-      "Falsche Antwort C",
-      "Falsche Antwort D"
+      "/*",
+      "#",
+      "//",
+      "--"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Welcher Operator prüft auf Gleichheit?",
+    "options": [
+      "\u003d",
+      ":\u003d",
+      "equals",
+      "\u003d\u003d"
+    ],
+    "correctIndex": 3
+  },
+  {
+    "text": "Was ist \u0027null\u0027 in Java?",
+    "options": [
+      "Die Zahl 0",
+      "Eine fehlende Referenz",
+      "Ein leerer String",
+      "Ein Fehler"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welche Schleife prüft die Bedingung am Ende?",
+    "options": [
+      "do-while",
+      "for",
+      "while",
+      "foreach"
     ],
     "correctIndex": 0
   },
   {
-    "text": "Dies ist Frage Nummer 5 (Platzhalter)",
+    "text": "Was ist Vererbung?",
     "options": [
-      "Richtige Antwort A",
-      "Falsche Antwort B",
-      "Falsche Antwort C",
-      "Falsche Antwort D"
+      "Verstecken von Daten",
+      "Übernahme von Eigenschaften",
+      "Polymorphie",
+      "Kapselung"
     ],
-    "correctIndex": 0
+    "correctIndex": 1
   },
   {
-    "text": "Dies ist Frage Nummer 6 (Platzhalter)",
-    "options": [
-      "Richtige Antwort A",
-      "Falsche Antwort B",
-      "Falsche Antwort C",
-      "Falsche Antwort D"
-    ],
-    "correctIndex": 0
-  },
-  {
-    "text": "Dies ist Frage Nummer 7 (Platzhalter)",
-    "options": [
-      "Richtige Antwort A",
-      "Falsche Antwort B",
-      "Falsche Antwort C",
-      "Falsche Antwort D"
-    ],
-    "correctIndex": 0
-  },
-  {
-    "text": "Dies ist Frage Nummer 8 (Platzhalter)",
-    "options": [
-      "Richtige Antwort A",
-      "Falsche Antwort B",
-      "Falsche Antwort C",
-      "Falsche Antwort D"
-    ],
-    "correctIndex": 0
-  },
-  {
-    "text": "Dies ist Frage Nummer 9 (Platzhalter)",
-    "options": [
-      "Richtige Antwort A",
-      "Falsche Antwort B",
-      "Falsche Antwort C",
-      "Falsche Antwort D"
-    ],
-    "correctIndex": 0
-  },
-  {
-    "text": "Dies ist Frage Nummer 10 (Platzhalter)",
-    "options": [
-      "Richtige Antwort A",
-      "Falsche Antwort B",
-      "Falsche Antwort C",
-      "Falsche Antwort D"
-    ],
-    "correctIndex": 0
-  },
-  {
-    "text": "Welches Schlüsselwort wird verwendet, um eine Klasse zu vererben?",
+    "text": "Welches Keyword nutzt man für Vererbung?",
     "options": [
       "extends",
       "implements",
@@ -110,23 +120,883 @@
     "correctIndex": 0
   },
   {
-    "text": "JUnit Test Frage?",
+    "text": "Was ist Kapselung?",
     "options": [
-      "A",
-      "B",
-      "C",
-      "D"
+      "Vererbung von Methoden",
+      "Überladen von Methoden",
+      "Verbergen von Daten",
+      "Löschen von Objekten"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Ein Objekt ist eine Instanz einer...?",
+    "options": [
+      "Methode",
+      "Variable",
+      "Klasse",
+      "Funktion"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Welche Methode wird beim Erstellen eines Objekts aufgerufen?",
+    "options": [
+      "Destruktor",
+      "Konstruktor",
+      "Main",
+      "Setter"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was bedeutet Polymorphie?",
+    "options": [
+      "Mehrfachvererbung",
+      "Datenkapselung",
+      "Statische Typisierung",
+      "Vielgestaltigkeit"
+    ],
+    "correctIndex": 3
+  },
+  {
+    "text": "Welches Keyword macht eine Variable unveränderbar?",
+    "options": [
+      "static",
+      "final",
+      "const",
+      "immutable"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein Interface?",
+    "options": [
+      "Eine Klasse mit Konstruktor",
+      "Eine Sammlung abstrakter Methoden",
+      "Eine Variable",
+      "Ein Datentyp"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was bedeutet \u0027Overloading\u0027?",
+    "options": [
+      "Gleicher Name, andere Parameter",
+      "Gleicher Name, gleiche Parameter",
+      "Überschreiben einer Methode",
+      "Löschen einer Methode"
     ],
     "correctIndex": 0
   },
   {
-    "text": "JUnit Test Frage?",
+    "text": "Was ist \u0027this\u0027?",
     "options": [
-      "A",
-      "B",
-      "C",
-      "D"
+      "Referenz auf die Elternklasse",
+      "Ein statischer Wert",
+      "Referenz auf das aktuelle Objekt",
+      "Eine Schleife"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Welche Datenstruktur arbeitet nach dem LIFO-Prinzip?",
+    "options": [
+      "Queue",
+      "List",
+      "Stack",
+      "Tree"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Welche Datenstruktur arbeitet nach dem FIFO-Prinzip?",
+    "options": [
+      "Queue",
+      "Stack",
+      "Array",
+      "Graph"
     ],
     "correctIndex": 0
+  },
+  {
+    "text": "Was ist die Zeitkomplexität von Binary Search?",
+    "options": [
+      "O(n)",
+      "O(log n)",
+      "O(n^2)",
+      "O(1)"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welches ist ein Sortieralgorithmus?",
+    "options": [
+      "BinarySearch",
+      "Dijkstra",
+      "QuickSort",
+      "Prim"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was speichert eine HashMap?",
+    "options": [
+      "Nur Werte",
+      "Schlüssel-Wert-Paare",
+      "Nur Schlüssel",
+      "Sortierte Listen"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein Array?",
+    "options": [
+      "Variable Größe",
+      "Verkettete Liste",
+      "Feste Größe, gleicher Datentyp",
+      "Ein Baum"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Welche Struktur hat eine Wurzel (Root)?",
+    "options": [
+      "Stack",
+      "Baum (Tree)",
+      "Queue",
+      "Hashmap"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Rekursion?",
+    "options": [
+      "Eine Schleife",
+      "Ein Fehler",
+      "Eine Funktion ruft sich selbst auf",
+      "Eine Datenbankabfrage"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist der schlechteste Fall für Bubble Sort?",
+    "options": [
+      "O(n log n)",
+      "O(n^2)",
+      "O(n)",
+      "O(1)"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein Algorithmus?",
+    "options": [
+      "Ein Computerprogramm",
+      "Eine Hardware",
+      "Eine Schritt-für-Schritt-Anleitung",
+      "Ein Datentyp"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Welcher Befehl holt Daten aus einer DB?",
+    "options": [
+      "GET",
+      "SELECT",
+      "FETCH",
+      "PULL"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welcher Befehl fügt Daten ein?",
+    "options": [
+      "ADD",
+      "UPDATE",
+      "INSERT INTO",
+      "PUT"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist ein Primary Key?",
+    "options": [
+      "Fremdschlüssel",
+      "Eindeutige ID",
+      "Ein Datentyp",
+      "Eine Tabelle"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Wofür steht SQL?",
+    "options": [
+      "Strong Question Language",
+      "Simple Query List",
+      "System Query Logic",
+      "Structured Query Language"
+    ],
+    "correctIndex": 3
+  },
+  {
+    "text": "Welcher Befehl löscht eine Tabelle?",
+    "options": [
+      "DROP TABLE",
+      "DELETE TABLE",
+      "REMOVE TABLE",
+      "CLEAR TABLE"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Was macht \u0027JOIN\u0027?",
+    "options": [
+      "Löscht Duplikate",
+      "Verbindet zwei Tabellen",
+      "Sortiert Daten",
+      "Erstellt eine Tabelle"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welcher Befehl ändert Daten?",
+    "options": [
+      "CHANGE",
+      "MODIFY",
+      "UPDATE",
+      "ALTER"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist ein Foreign Key?",
+    "options": [
+      "Hauptschlüssel",
+      "Ein Passwort",
+      "Verweis auf Primary Key anderer Tabelle",
+      "Ein Index"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was bedeutet ACID?",
+    "options": [
+      "Association, Class, Interface, Data",
+      "Atomicity, Consistency, Isolation, Durability",
+      "Access, Control, Input, Data",
+      "All, Clear, Insert, Delete"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welcher Datentyp speichert Text in SQL?",
+    "options": [
+      "INT",
+      "FLOAT",
+      "VARCHAR",
+      "BOOL"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Wofür steht HTTP?",
+    "options": [
+      "High Transfer Text Protocol",
+      "HyperText Transfer Protocol",
+      "Hyper Tool Transfer Protocol",
+      "Home Text Type Protocol"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welcher Port ist Standard für HTTPS?",
+    "options": [
+      "80",
+      "22",
+      "443",
+      "21"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist eine IP-Adresse?",
+    "options": [
+      "Ein Passwort",
+      "Adresse eines Geräts im Netz",
+      "Ein Protokoll",
+      "Ein Webbrowser"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Wofür steht HTML?",
+    "options": [
+      "HyperText Markup Language",
+      "Home Tool Made Language",
+      "Hyperlink Text Main Language",
+      "High Tech Main Logic"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Was macht DNS?",
+    "options": [
+      "Verschlüsselt Daten",
+      "Speichert Webseiten",
+      "Wandelt Domainnamen in IPs um",
+      "Sendet E-Mails"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist Ping?",
+    "options": [
+      "Ein Spiel",
+      "Testet Erreichbarkeit eines Hosts",
+      "Ein Webserver",
+      "Ein Virus"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welches Protokoll ist verbindungslos?",
+    "options": [
+      "TCP",
+      "UDP",
+      "HTTP",
+      "FTP"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Localhost?",
+    "options": [
+      "192.168.0.1",
+      "10.0.0.1",
+      "0.0.0.0",
+      "127.0.0.1"
+    ],
+    "correctIndex": 3
+  },
+  {
+    "text": "Was ist CSS?",
+    "options": [
+      "Computer Style System",
+      "Cascading Style Sheets",
+      "Creative Style Sheet",
+      "Coding Super System"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein API?",
+    "options": [
+      "Advanced Program Input",
+      "Automated Process Interaction",
+      "Application Programming Interface",
+      "Apple Phone Interface"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist der Kernel?",
+    "options": [
+      "Ein Programm",
+      "Kern des Betriebssystems",
+      "Ein Speicher",
+      "Ein Prozessor"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein Thread?",
+    "options": [
+      "Ein Kabel",
+      "Ein leichtgewichtiger Prozess",
+      "Ein Virus",
+      "Ein Ordner"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Deadlock?",
+    "options": [
+      "Ein Absturz",
+      "Prozesse blockieren sich gegenseitig",
+      "Ein blauer Bildschirm",
+      "Ein Speicherfehler"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welches ist ein Open-Source OS?",
+    "options": [
+      "Windows",
+      "macOS",
+      "Linux",
+      "iOS"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was verwaltet das Dateisystem?",
+    "options": [
+      "Den Prozessor",
+      "Dateien und Verzeichnisse",
+      "Das Internet",
+      "Die Grafikkarte"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist RAM?",
+    "options": [
+      "Festplatte",
+      "Prozessor",
+      "Grafikspeicher",
+      "Arbeitsspeicher"
+    ],
+    "correctIndex": 3
+  },
+  {
+    "text": "Was bedeutet GUI?",
+    "options": [
+      "Global User Input",
+      "Graphical User Interface",
+      "General Unit Interface",
+      "Gaming User Interface"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was macht der Scheduler?",
+    "options": [
+      "Speichert Dateien",
+      "Verteilt CPU-Zeit an Prozesse",
+      "Druckt Dokumente",
+      "Startet den PC"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Virtualisierung?",
+    "options": [
+      "3D Grafik",
+      "Simulation von Hardware",
+      "Internet surfen",
+      "Datenkompression"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein Treiber?",
+    "options": [
+      "Ein Benutzer",
+      "Ein Auto",
+      "Software zur Hardware-Steuerung",
+      "Ein Werkzeug"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Wofür steht Scrum?",
+    "options": [
+      "Programmiersprache",
+      "Agiles Framework",
+      "Datenbank",
+      "Betriebssystem"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein User Story?",
+    "options": [
+      "Ein Märchen",
+      "Ein Bug Report",
+      "Beschreibung einer Anforderung",
+      "Ein Testfall"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist Refactoring?",
+    "options": [
+      "Code löschen",
+      "Code verbessern ohne Funktionsänderung",
+      "Neue Features bauen",
+      "Testen"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Unit Testing?",
+    "options": [
+      "Testen des ganzen Systems",
+      "Testen einzelner Komponenten",
+      "Benutzertest",
+      "Hardwaretest"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Wofür steht UML?",
+    "options": [
+      "Universal Main Logic",
+      "User Made Language",
+      "Unified Modeling Language",
+      "Unit Mode List"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist ein Singleton?",
+    "options": [
+      "Eine Variable",
+      "Klasse mit nur einer Instanz",
+      "Ein Datentyp",
+      "Ein Fehler"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Waterfall?",
+    "options": [
+      "Eine agile Methode",
+      "Ein Diagramm",
+      "Ein lineares Vorgehensmodell",
+      "Ein Algorithmus"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist MVC?",
+    "options": [
+      "Main Version Code",
+      "Make View Create",
+      "Model View Controller",
+      "Multi Variable Coding"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist ein Bug?",
+    "options": [
+      "Ein Fehler im Programm",
+      "Ein Feature",
+      "Ein Virus",
+      "Ein Benutzer"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Was ist CI/CD?",
+    "options": [
+      "Code Input / Code Delete",
+      "Continuous Integration / Deployment",
+      "Create Interface / Create Database",
+      "Clean Input / Clean Data"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Phishing?",
+    "options": [
+      "Ein Virus",
+      "Datenklau durch gefälschte Mails",
+      "Hacken von WLAN",
+      "Ein Passwort"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was macht eine Firewall?",
+    "options": [
+      "Löscht Viren",
+      "Überwacht Netzwerkverkehr",
+      "Beschleunigt PC",
+      "Speichert Passwörter"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist HTTPS?",
+    "options": [
+      "Schnelles HTTP",
+      "Verschlüsseltes HTTP",
+      "Altes HTTP",
+      "Neues Internet"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist SQL Injection?",
+    "options": [
+      "Datenbank Update",
+      "Ein Backup",
+      "Einschleusen von SQL-Befehlen",
+      "Ein Login"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist ein Hash?",
+    "options": [
+      "Ein Passwort",
+      "Einweg-Verschlüsselung",
+      "Ein Backup",
+      "Eine Datei"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist 2FA?",
+    "options": [
+      "2 Fast Answers",
+      "Zwei-Faktor-Authentifizierung",
+      "2 File Access",
+      "2 Firewalls Active"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Malware?",
+    "options": [
+      "Hardware",
+      "Schadsoftware",
+      "Antivirus",
+      "Update"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein VPN?",
+    "options": [
+      "Very Private Name",
+      "Virtual Private Network",
+      "Virus Protection Net",
+      "Visual Public Network"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Brute Force?",
+    "options": [
+      "Ein starker PC",
+      "Ausprobieren aller Passwörter",
+      "Ein Virus",
+      "Eine Firewall"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was bedeutet DSGVO?",
+    "options": [
+      "Datenschutz-Grundverordnung",
+      "Daten-Sicherheits-Gesetz",
+      "Deutsche-Software-GmbH",
+      "Digital-Service-Group"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Welcher Befehl speichert Änderungen?",
+    "options": [
+      "git save",
+      "git commit",
+      "git store",
+      "git keep"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Welcher Befehl lädt Änderungen herunter?",
+    "options": [
+      "git push",
+      "git down",
+      "git pull",
+      "git get"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist ein Repository?",
+    "options": [
+      "Ein Ordner",
+      "Speicherort für Code",
+      "Eine Datei",
+      "Ein Server"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist ein Branch?",
+    "options": [
+      "Ein Fehler",
+      "Ein Entwicklungszweig",
+      "Ein Tag",
+      "Ein User"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was macht \u0027git clone\u0027?",
+    "options": [
+      "Kopiert ein Repo",
+      "Löscht ein Repo",
+      "Erstellt ein Repo",
+      "Zeigt Status"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Was ist Maven?",
+    "options": [
+      "Ein Editor",
+      "Build Management Tool",
+      "Ein Virus",
+      "Ein Spiel"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist eine IDE?",
+    "options": [
+      "Internet Data Exchange",
+      "Integrated Development Environment",
+      "Input Data Error",
+      "Internal Drive Error"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Docker?",
+    "options": [
+      "Ein Betriebssystem",
+      "Container-Plattform",
+      "Eine Datenbank",
+      "Ein Editor"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Stack Overflow?",
+    "options": [
+      "Ein Speicherfehler",
+      "Forum für Entwickler",
+      "Ein Virus",
+      "Ein Buch"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist JSON?",
+    "options": [
+      "Java Source Open Network",
+      "Just Simple Object Name",
+      "JavaScript Object Notation",
+      "Join System On Net"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Wer gilt als erster Programmierer?",
+    "options": [
+      "Alan Turing",
+      "Ada Lovelace",
+      "Bill Gates",
+      "Steve Jobs"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist binär?",
+    "options": [
+      "0 bis 9",
+      "0 und 1",
+      "A bis Z",
+      "Ja und Nein"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist 1 Byte?",
+    "options": [
+      "4 Bit",
+      "16 Bit",
+      "8 Bit",
+      "1 Bit"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist CPU?",
+    "options": [
+      "Central Power Unit",
+      "Central Processing Unit",
+      "Computer Personal Unit",
+      "Core Program Unit"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist BIOS?",
+    "options": [
+      "Basic Input Output System",
+      "Big Input Open System",
+      "Base Internal OS",
+      "Binary Input OS"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Was ist Open Source?",
+    "options": [
+      "Kostenpflichtig",
+      "Quellcode ist öffentlich",
+      "Geheim",
+      "Nur für Windows"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist KI?",
+    "options": [
+      "Keine Info",
+      "Künstliche Intelligenz",
+      "Key Input",
+      "Kernel Interface"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist Cloud Computing?",
+    "options": [
+      "Wettervorhersage",
+      "IT-Dienste über Internet",
+      "Festplatte",
+      "Monitor"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Was ist IoT?",
+    "options": [
+      "Input of Text",
+      "Intranet of Tools",
+      "Internet of Things",
+      "Image of Time"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Was ist Big Data?",
+    "options": [
+      "Eine große Datei",
+      "Verarbeitung riesiger Datenmengen",
+      "Ein großer Server",
+      "Ein langes Kabel"
+    ],
+    "correctIndex": 1
   }
 ]
