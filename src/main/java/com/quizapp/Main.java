@@ -43,26 +43,44 @@ public class Main {
             TimeMode timeModePage = new TimeMode(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
             Admin adminPage = new Admin(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
 
+            // ✅ UPDATED MAIN MENU: With Password Check for Admin
             MainMenu mainMenu = new MainMenu(
                     // 1. Classic Quiz Action
                     () -> {
-                        quizPage.startGame(currentUser[0]); // Start game with user
+                        quizPage.startGame(currentUser[0]);
                         cardLayout.show(cardPanel, "QUIZ");
                     },
                     // 2. Highscores Action
                     () -> {
-                        highscoresPage.refresh(); // Refresh data
+                        highscoresPage.refresh();
                         cardLayout.show(cardPanel, "HIGHSCORES");
                     },
                     // 3. Credits Action
                     () -> cardLayout.show(cardPanel, "CREDITS"),
                     // 4. Time Mode Action
                     () -> {
-                        timeModePage.startGame(currentUser[0]); // Start game with user
+                        timeModePage.startGame(currentUser[0]);
                         cardLayout.show(cardPanel, "TIME_MODE");
                     },
-                    // 5. Admin Action
-                    () -> cardLayout.show(cardPanel, "ADMIN")
+                    // 5. Admin Action (SECURE HASH CHECK 🔒)
+                    () -> {
+                        JPasswordField pf = new JPasswordField();
+                        int result = JOptionPane.showConfirmDialog(
+                                frame, pf, "Bitte Admin-Passwort eingeben:",
+                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+                        );
+
+                        if (result == JOptionPane.OK_OPTION) {
+                            String input = new String(pf.getPassword());
+
+                            // Hash the input and check against the stored hash
+                            if (checkPassword(input)) {
+                                cardLayout.show(cardPanel, "ADMIN");
+                            } else {
+                                JOptionPane.showMessageDialog(frame, "Falsches Passwort!", "Fehler", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    }
             );
 
             // --- Add cards (Standard setup) ---
@@ -98,5 +116,27 @@ public class Main {
             // Home button
             headerBar.onHome(() -> cardLayout.show(cardPanel, "MAIN_MENU"));
         });
+    }
+    // 🔒 Security Helper: Checks password against SHA-256 Hash
+    private static boolean checkPassword(String plainText) {
+        // This is the SHA-256 hash for password
+        String storedHash = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] encodedhash = digest.digest(plainText.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+
+            // Convert byte array to Hex String
+            StringBuilder hexString = new StringBuilder(2 * encodedhash.length);
+            for (byte b : encodedhash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString().equals(storedHash);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
