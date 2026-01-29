@@ -302,12 +302,12 @@
   {
     "text": "Welcher Befehl holt Daten aus einer DB?",
     "options": [
-      "GET",
       "SELECT",
+      "GET",
       "FETCH",
       "PULL"
     ],
-    "correctIndex": 1
+    "correctIndex": 0
   },
   {
     "text": "Welcher Befehl fügt Daten ein?",

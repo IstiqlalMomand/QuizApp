@@ -63,6 +63,32 @@ public class DataManager {
             return new ArrayList<>(); // Return empty if file missing
         }
     }
+    //  NEW: Update a specific question
+    public static void updateQuestion(int index, Question updatedQ) {
+        List<Question> all = loadQuestions();
+        if (index >= 0 && index < all.size()) {
+            all.set(index, updatedQ);
+            saveAllQuestions(all);
+        }
+    }
+
+    //  NEW: Delete a specific question
+    public static void deleteQuestion(int index) {
+        List<Question> all = loadQuestions();
+        if (index >= 0 && index < all.size()) {
+            all.remove(index);
+            saveAllQuestions(all);
+        }
+    }
+
+    // Helper to rewrite the full list
+    private static void saveAllQuestions(List<Question> questions) {
+        try (java.io.Writer writer = new java.io.FileWriter(QUESTIONS_FILE)) {
+            new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(questions, writer);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void ensureQuestionsExist() {
         List<Question> current = loadQuestions();

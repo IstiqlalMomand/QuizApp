@@ -10,6 +10,7 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Admin {
@@ -22,7 +23,11 @@ public class Admin {
     // Inputs
     private JTextArea questionArea;
     private JTextField ansA, ansB, ansC, ansD;
-    private JPanel listBody; // Container for the list of questions
+    private JButton saveButton;
+    private JPanel listBody;
+
+    //  STATE: -1 means "New Question", otherwise it's the index we are editing
+    private int editingIndex = -1;
 
     public Admin(Runnable onBack) {
         this.onBack = onBack;
@@ -30,7 +35,7 @@ public class Admin {
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
 
-        // ===== Page Content (scrollable) =====
+        // ===== Page Content =====
         JPanel contentBody = new JPanel();
         contentBody.setLayout(new BoxLayout(contentBody, BoxLayout.Y_AXIS));
         contentBody.setBackground(BG_COLOR);
@@ -45,7 +50,10 @@ public class Admin {
         title.setForeground(TEXT_DARK);
 
         JButton backTop = new PrimaryButton("Zurück");
-        backTop.addActionListener(e -> onBack.run());
+        backTop.addActionListener(e -> {
+            resetForm(); // Clear inputs when leaving
+            onBack.run();
+        });
 
         JPanel backWrap = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         backWrap.setOpaque(false);
@@ -57,52 +65,41 @@ public class Admin {
         contentBody.add(topRow);
         contentBody.add(Box.createVerticalStrut(25));
 
-        // ===== Card: Neue Frage hinzufügen =====
+        // ===== Card: Frage Editor =====
         JPanel addCard = createWhiteCard();
         addCard.setLayout(new BoxLayout(addCard, BoxLayout.Y_AXIS));
         addCard.setBorder(new EmptyBorder(30, 35, 30, 35));
         addCard.setAlignmentX(Component.CENTER_ALIGNMENT);
-        addCard.setMaximumSize(new Dimension(1100, 450));
+        addCard.setMaximumSize(new Dimension(1100, 480));
 
-        JLabel cardTitle = new JLabel("Neue Frage hinzufügen");
-        cardTitle.setFont(new Font("Serif", Font.BOLD, 32));
+        JLabel cardTitle = new JLabel("Frage bearbeiten / hinzufügen");
+        cardTitle.setFont(new Font("Serif", Font.BOLD, 28));
         cardTitle.setForeground(TEXT_DARK);
         cardTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JSeparator sep = new JSeparator();
-        sep.setForeground(new Color(230, 230, 230));
-        sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-
         addCard.add(cardTitle);
-        addCard.add(Box.createVerticalStrut(18));
-        addCard.add(sep);
-        addCard.add(Box.createVerticalStrut(18));
+        addCard.add(Box.createVerticalStrut(20));
 
         // --- FRAGETEXT ---
-        JLabel qLabel = smallSectionLabel("FRAGETEXT");
-        qLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        addCard.add(qLabel);
-        addCard.add(Box.createVerticalStrut(10));
+        addCard.add(smallSectionLabel("FRAGETEXT"));
+        addCard.add(Box.createVerticalStrut(5));
 
         questionArea = new JTextArea(3, 40);
         questionArea.setLineWrap(true);
         questionArea.setWrapStyleWord(true);
         questionArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        questionArea.setBackground(Color.WHITE);
         questionArea.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(210, 220, 235)),
-                new EmptyBorder(14, 14, 14, 14)
+                new EmptyBorder(10, 10, 10, 10)
         ));
-        questionArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, 110));
         installPlaceholder(questionArea, "Geben Sie hier die Frage ein...");
-
         addCard.add(questionArea);
-        addCard.add(Box.createVerticalStrut(22));
+        addCard.add(Box.createVerticalStrut(20));
 
         // ===== Answers grid =====
-        JPanel answersGrid = new JPanel(new GridLayout(2, 2, 22, 18));
+        JPanel answersGrid = new JPanel(new GridLayout(2, 2, 20, 15));
         answersGrid.setOpaque(false);
-        answersGrid.setMaximumSize(new Dimension(Integer.MAX_VALUE, 210));
+        answersGrid.setMaximumSize(new Dimension(Integer.MAX_VALUE, 160));
 
         ansA = createInput("ANTWORT A (KORREKT)", "Richtige Antwort");
         ansB = createInput("ANTWORT B", "Falsche Antwort 1");
@@ -115,74 +112,56 @@ public class Admin {
         answersGrid.add(wrapField(ansD));
 
         addCard.add(answersGrid);
-        addCard.add(Box.createVerticalStrut(22));
+        addCard.add(Box.createVerticalStrut(20));
 
-        // Save button
-        JPanel saveRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        saveRow.setOpaque(false);
+        // Buttons Row (Save & Cancel)
+        JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        btnRow.setOpaque(false);
 
-        JButton save = new JButton("Speichern");
-        save.setFont(new Font("SansSerif", Font.BOLD, 14));
-        save.setBackground(new Color(25, 135, 84));
-        save.setForeground(Color.WHITE);
-        save.setFocusPainted(false);
+        JButton cancelBtn = new JButton("Abbrechen");
+        cancelBtn.addActionListener(e -> resetForm());
 
-        // ✅ FIX FOR MAC USERS: Force the background color to paint
-        save.setOpaque(true);
-        save.setBorderPainted(false);
+        saveButton = new JButton("Speichern");
+        saveButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        saveButton.setBackground(new Color(25, 135, 84));
+        saveButton.setForeground(Color.WHITE);
+        saveButton.setFocusPainted(false);
+        saveButton.setOpaque(true);
+        saveButton.setBorderPainted(false);
+        saveButton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        saveButton.addActionListener(e -> saveQuestion());
 
-        save.setBorder(BorderFactory.createEmptyBorder(10, 22, 10, 22));
-        save.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // ✅ REAL LOGIC: Save to JSON
-        save.addActionListener(e -> saveQuestion());
-
-        saveRow.add(save);
-        addCard.add(saveRow);
+        btnRow.add(cancelBtn);
+        btnRow.add(saveButton);
+        addCard.add(btnRow);
 
         contentBody.add(addCard);
-        contentBody.add(Box.createVerticalStrut(28));
+        contentBody.add(Box.createVerticalStrut(30));
 
-        // ===== Card: Vorhandene Fragen (Live Data) =====
+        // ===== Card: Vorhandene Fragen =====
         JPanel listCard = createWhiteCard();
         listCard.setLayout(new BorderLayout());
         listCard.setBorder(new EmptyBorder(24, 28, 24, 28));
         listCard.setAlignmentX(Component.CENTER_ALIGNMENT);
-        listCard.setMaximumSize(new Dimension(1100, 520));
+        listCard.setMaximumSize(new Dimension(1100, 500));
 
         JLabel listTitle = new JLabel("Vorhandene Fragen");
-        listTitle.setFont(new Font("Serif", Font.BOLD, 30));
+        listTitle.setFont(new Font("Serif", Font.BOLD, 26));
         listTitle.setForeground(TEXT_DARK);
+        listCard.add(listTitle, BorderLayout.NORTH);
 
-        JPanel listTitleRow = new JPanel(new BorderLayout());
-        listTitleRow.setOpaque(false);
-        listTitleRow.add(listTitle, BorderLayout.WEST);
-
-        listCard.add(listTitleRow, BorderLayout.NORTH);
-
-        // List content
         listBody = new JPanel();
         listBody.setLayout(new BoxLayout(listBody, BoxLayout.Y_AXIS));
         listBody.setOpaque(false);
-        listBody.setBorder(new EmptyBorder(18, 0, 0, 0));
-
-        refreshQuestionList(); // Load data on startup
+        listBody.setBorder(new EmptyBorder(15, 0, 0, 0));
 
         JScrollPane innerScroll = new JScrollPane(listBody);
-        innerScroll.setBorder(BorderFactory.createEmptyBorder());
-        innerScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        innerScroll.setBorder(null);
         innerScroll.getVerticalScrollBar().setUnitIncrement(16);
 
         listCard.add(innerScroll, BorderLayout.CENTER);
-
         contentBody.add(listCard);
-        contentBody.add(Box.createVerticalStrut(28));
-
-        // Bottom back button
-        JButton backBottom = new PrimaryButton("Zurück");
-        backBottom.setAlignmentX(Component.CENTER_ALIGNMENT);
-        backBottom.addActionListener(e -> onBack.run());
-        contentBody.add(backBottom);
 
         JScrollPane pageScroll = new JScrollPane(contentBody);
         pageScroll.setBorder(null);
@@ -190,53 +169,98 @@ public class Admin {
         pageScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         mainPanel.add(pageScroll, BorderLayout.CENTER);
+
+        refreshQuestionList(); // Load initial data
     }
 
+    // --- LOGIC ---
+
     private void saveQuestion() {
-        // 1. Validate inputs
         String qText = questionArea.getText().trim();
-        if (qText.equals("Geben Sie hier die Frage ein...") || qText.isEmpty()) {
-            JOptionPane.showMessageDialog(mainPanel, "Bitte eine Frage eingeben.");
-            return;
+        if (isPlaceholder(questionArea) || qText.isEmpty()) {
+            JOptionPane.showMessageDialog(mainPanel, "Bitte eine Frage eingeben."); return;
         }
-
-        String tA = ansA.getText().trim();
-        String tB = ansB.getText().trim();
-        String tC = ansC.getText().trim();
-        String tD = ansD.getText().trim();
-
         if (isPlaceholder(ansA) || isPlaceholder(ansB) || isPlaceholder(ansC) || isPlaceholder(ansD)) {
-            JOptionPane.showMessageDialog(mainPanel, "Bitte alle Antwortfelder ausfüllen.");
-            return;
+            JOptionPane.showMessageDialog(mainPanel, "Bitte alle Antworten ausfüllen."); return;
         }
 
-        // 2. Create Question Object
-        String[] options = {tA, tB, tC, tD};
-        // By design in this UI, Answer A is always the correct one (index 0).
-        Question newQ = new Question(qText, options, 0);
+        // Logic: Answer A is always the correct one in the FORM
+        String[] options = { ansA.getText().trim(), ansB.getText().trim(), ansC.getText().trim(), ansD.getText().trim() };
+        Question newQ = new Question(qText, options, 0); // 0 = A is correct
 
-        // 3. Save to JSON via DataManager
-        DataManager.saveQuestion(newQ);
+        if (editingIndex == -1) {
+            // CREATE NEW
+            DataManager.saveQuestion(newQ);
+        } else {
+            // UPDATE EXISTING
+            DataManager.updateQuestion(editingIndex, newQ);
+            JOptionPane.showMessageDialog(mainPanel, "Frage aktualisiert!");
+        }
 
-        // 4. Feedback & Refresh
-        JOptionPane.showMessageDialog(mainPanel, "Frage erfolgreich gespeichert!");
-        clearInputs();
+        resetForm();
         refreshQuestionList();
+    }
+
+    private void editQuestion(int index, Question q) {
+        this.editingIndex = index;
+        saveButton.setText("Aktualisieren"); // Change button text
+        saveButton.setBackground(new Color(13, 110, 253)); // Blue for Update
+
+        questionArea.setForeground(Color.BLACK);
+        questionArea.setText(q.getText());
+
+        // We need to put the CORRECT answer into Field A, and the rest in B, C, D
+        String[] opts = q.getOptions();
+        int correct = q.getCorrectIndex();
+
+        setTextNoPlaceholder(ansA, opts[correct]);
+
+        // Fill B, C, D with the remaining options
+        List<String> wrongAnswers = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            if (i != correct) wrongAnswers.add(opts[i]);
+        }
+
+        setTextNoPlaceholder(ansB, wrongAnswers.get(0));
+        setTextNoPlaceholder(ansC, wrongAnswers.get(1));
+        setTextNoPlaceholder(ansD, wrongAnswers.get(2));
+
+        // Scroll to top to see the edit form
+        ((JScrollPane) mainPanel.getComponent(0)).getVerticalScrollBar().setValue(0);
+    }
+
+    private void deleteQuestion(int index) {
+        int confirm = JOptionPane.showConfirmDialog(mainPanel,
+                "Möchten Sie diese Frage wirklich löschen?", "Löschen bestätigen", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            DataManager.deleteQuestion(index);
+            if (editingIndex == index) resetForm(); // If we were editing this one, cancel edit
+            refreshQuestionList();
+        }
+    }
+
+    private void resetForm() {
+        editingIndex = -1;
+        saveButton.setText("Speichern");
+        saveButton.setBackground(new Color(25, 135, 84)); // Green for Save
+
+        clearInput(questionArea, "Geben Sie hier die Frage ein...");
+        clearInput(ansA, "Richtige Antwort");
+        clearInput(ansB, "Falsche Antwort 1");
+        clearInput(ansC, "Falsche Antwort 2");
+        clearInput(ansD, "Falsche Antwort 3");
     }
 
     private void refreshQuestionList() {
         listBody.removeAll();
-        // ✅ Load real data from DataManager
         List<Question> all = DataManager.loadQuestions();
 
         if (all.isEmpty()) {
-            JLabel empty = new JLabel("Keine Fragen gefunden.");
-            empty.setFont(new Font("SansSerif", Font.ITALIC, 14));
-            listBody.add(empty);
+            listBody.add(new JLabel("Keine Fragen gefunden."));
         } else {
             for (int i = 0; i < all.size(); i++) {
-                Question q = all.get(i);
-                listBody.add(questionRow((i + 1) + ". " + q.getText()));
+                listBody.add(createListRow(i, all.get(i)));
                 listBody.add(Box.createVerticalStrut(10));
             }
         }
@@ -244,97 +268,84 @@ public class Admin {
         listBody.repaint();
     }
 
-    private void clearInputs() {
-        questionArea.setText(""); installPlaceholder(questionArea, "Geben Sie hier die Frage ein...");
-        ansA.setText(""); installPlaceholder(ansA, "Richtige Antwort");
-        ansB.setText(""); installPlaceholder(ansB, "Falsche Antwort 1");
-        ansC.setText(""); installPlaceholder(ansC, "Falsche Antwort 2");
-        ansD.setText(""); installPlaceholder(ansD, "Falsche Antwort 3");
-    }
+    // --- UI HELPERS ---
 
-    private boolean isPlaceholder(JTextField f) {
-        return f.getForeground().equals(new Color(140, 140, 140));
-    }
+    private JPanel createListRow(int index, Question q) {
+        JPanel row = new JPanel(new BorderLayout());
+        row.setBackground(Color.WHITE);
+        row.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(230, 230, 230)),
+                new EmptyBorder(15, 15, 15, 15)
+        ));
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
 
-    // ================= Helpers =================
+        JLabel lbl = new JLabel("<html><b>" + (index + 1) + ".</b> " + q.getText() + "</html>");
+        lbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lbl.setForeground(TEXT_DARK);
+
+        // Buttons Panel
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        actions.setOpaque(false);
+
+        JButton edit = new JButton("✏️");
+        edit.setToolTipText("Bearbeiten");
+        edit.addActionListener(e -> editQuestion(index, q));
+
+        JButton delete = new JButton("🗑️");
+        delete.setToolTipText("Löschen");
+        delete.setForeground(Color.RED);
+        delete.addActionListener(e -> deleteQuestion(index));
+
+        actions.add(edit);
+        actions.add(delete);
+
+        row.add(lbl, BorderLayout.CENTER);
+        row.add(actions, BorderLayout.EAST);
+        return row;
+    }
 
     private JPanel createWhiteCard() {
         return new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
+            @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                int w = getWidth(); int h = getHeight();
-                g2.setColor(new Color(225, 225, 225)); g2.fillRoundRect(3, 3, w - 6, h - 6, 20, 20);
-                g2.setColor(Color.WHITE); g2.fillRoundRect(0, 0, w - 6, h - 6, 20, 20);
+                g2.setColor(new Color(225, 225, 225)); g2.fillRoundRect(3, 3, getWidth()-6, getHeight()-6, 20, 20);
+                g2.setColor(Color.WHITE); g2.fillRoundRect(0, 0, getWidth()-6, getHeight()-6, 20, 20);
             }
         };
     }
 
-    private JLabel smallSectionLabel(String text) {
-        JLabel l = new JLabel(text);
-        l.setFont(new Font("SansSerif", Font.BOLD, 12));
-        l.setForeground(new Color(120, 120, 120));
-        return l;
-    }
-
     private JTextField createInput(String label, String placeholder) {
-        JTextField field = new JTextField();
-        field.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(210, 220, 235)),
-                new EmptyBorder(12, 12, 12, 12)
-        ));
-        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
-        installPlaceholder(field, placeholder);
-        field.putClientProperty("LABEL", label);
-        return field;
+        JTextField f = new JTextField();
+        f.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        installPlaceholder(f, placeholder);
+        f.putClientProperty("LABEL", label);
+        return f;
     }
 
     private JPanel wrapField(JTextField field) {
-        JPanel wrap = new JPanel();
-        wrap.setLayout(new BoxLayout(wrap, BoxLayout.Y_AXIS));
-        wrap.setOpaque(false);
-        String label = (String) field.getClientProperty("LABEL");
-        JLabel l = smallSectionLabel(label);
-        l.setAlignmentX(Component.LEFT_ALIGNMENT);
-        field.setAlignmentX(Component.LEFT_ALIGNMENT);
-        wrap.add(l);
-        wrap.add(Box.createVerticalStrut(8));
-        wrap.add(field);
-        return wrap;
+        JPanel w = new JPanel(); w.setLayout(new BoxLayout(w, BoxLayout.Y_AXIS)); w.setOpaque(false);
+        JLabel l = smallSectionLabel((String) field.getClientProperty("LABEL"));
+        l.setAlignmentX(Component.LEFT_ALIGNMENT); field.setAlignmentX(Component.LEFT_ALIGNMENT);
+        w.add(l); w.add(Box.createVerticalStrut(5)); w.add(field);
+        return w;
     }
 
-    private JPanel questionRow(String text) {
-        JPanel row = new JPanel(new BorderLayout());
-        row.setBackground(new Color(245, 245, 245));
-        row.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(235, 235, 235)),
-                new EmptyBorder(18, 18, 18, 18)
-        ));
-        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80)); // Limit height
-
-        JLabel l = new JLabel(text);
-        l.setFont(new Font("SansSerif", Font.PLAIN, 18));
-        l.setForeground(new Color(30, 30, 30));
-        row.add(l, BorderLayout.WEST);
-        return row;
+    private JLabel smallSectionLabel(String text) {
+        JLabel l = new JLabel(text); l.setFont(new Font("SansSerif", Font.BOLD, 12)); l.setForeground(Color.GRAY); return l;
     }
 
-    private void installPlaceholder(JTextComponent comp, String placeholder) {
-        Color placeholderColor = new Color(140, 140, 140);
-        Color textColor = new Color(30, 30, 30);
-        comp.setText(placeholder);
-        comp.setForeground(placeholderColor);
-        comp.addFocusListener(new FocusAdapter() {
-            @Override public void focusGained(FocusEvent e) {
-                if (comp.getText().equals(placeholder)) { comp.setText(""); comp.setForeground(textColor); }
-            }
-            @Override public void focusLost(FocusEvent e) {
-                if (comp.getText().trim().isEmpty()) { comp.setText(placeholder); comp.setForeground(placeholderColor); }
-            }
+    // Placeholder Logic
+    private void installPlaceholder(JTextComponent c, String p) {
+        c.setText(p); c.setForeground(Color.GRAY);
+        c.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) { if(c.getText().equals(p)) { c.setText(""); c.setForeground(Color.BLACK); } }
+            public void focusLost(FocusEvent e) { if(c.getText().trim().isEmpty()) { c.setText(p); c.setForeground(Color.GRAY); } }
         });
     }
+    private void clearInput(JTextComponent c, String p) { c.setText(p); c.setForeground(Color.GRAY); }
+    private void setTextNoPlaceholder(JTextComponent c, String t) { c.setText(t); c.setForeground(Color.BLACK); }
+    private boolean isPlaceholder(JTextComponent c) { return c.getForeground().equals(Color.GRAY); }
 
     public JPanel getMainPanel() { return mainPanel; }
 }

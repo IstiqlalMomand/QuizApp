@@ -86,7 +86,7 @@ public class MainMenu {
 
         grid.add(createCard(
                 "Verwaltung",
-                "Fragen hinzufügen oder bearbeiten.\n(Simuliert)",
+                "Fragen hinzufügen oder bearbeiten.\n",
                 "⚙",
                 ACCENT_GREY,
                 onOpenAdmin
