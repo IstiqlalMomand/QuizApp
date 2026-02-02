@@ -13,35 +13,58 @@ import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Die Admin-Klasse stellt die Benutzeroberfläche für die Verwaltung der Quizfragen bereit.
+ * <p>
+ * In dieser View kann der Administrator:
+ * </p>
+ * <ul>
+ * <li>Neue Fragen erstellen (Create)</li>
+ * <li>Alle vorhandenen Fragen in einer Liste einsehen (Read)</li>
+ * <li>Bestehende Fragen bearbeiten (Update)</li>
+ * <li>Fragen löschen (Delete)</li>
+ * </ul>
+ * <p>
+ * Die Klasse kommuniziert direkt mit dem {@link DataManager}, um Änderungen persistent zu speichern.
+ * </p>
+ *
+ * @author Istiqlal Momand
+ * @author Helal Storany
+ * @version 1.0
+ */
 public class Admin {
+    // ... (Rest des Codes bleibt identisch, keine Änderungen an der Logik nötig)
     private final JPanel mainPanel;
     private final Runnable onBack;
 
     private static final Color BG_COLOR = new Color(250, 251, 252);
     private static final Color TEXT_DARK = new Color(33, 37, 41);
 
-    // Inputs
     private JTextArea questionArea;
     private JTextField ansA, ansB, ansC, ansD;
     private JButton saveButton;
     private JPanel listBody;
-
-    //  STATE: -1 means "New Question", otherwise it's the index we are editing
     private int editingIndex = -1;
 
+    /**
+     * Erstellt die Administrator-Oberfläche und initialisiert das Layout.
+     *
+     * @param onBack Callback-Funktion, die ausgeführt wird, wenn der "Zurück"-Button gedrückt wird.
+     */
     public Admin(Runnable onBack) {
         this.onBack = onBack;
+        // ... (Code unverändert lassen) ...
+        // Um Platz zu sparen, kopiere hier den Rest deines ursprünglichen Konstruktors rein
+        // oder lasse ihn unverändert, da der Fehler nur im Javadoc oben war.
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
 
-        // ===== Page Content =====
         JPanel contentBody = new JPanel();
         contentBody.setLayout(new BoxLayout(contentBody, BoxLayout.Y_AXIS));
         contentBody.setBackground(BG_COLOR);
         contentBody.setBorder(new EmptyBorder(35, 60, 40, 60));
 
-        // ===== Title row =====
         JPanel topRow = new JPanel(new BorderLayout());
         topRow.setOpaque(false);
 
@@ -51,7 +74,7 @@ public class Admin {
 
         JButton backTop = new PrimaryButton("Zurück");
         backTop.addActionListener(e -> {
-            resetForm(); // Clear inputs when leaving
+            resetForm();
             onBack.run();
         });
 
@@ -65,7 +88,6 @@ public class Admin {
         contentBody.add(topRow);
         contentBody.add(Box.createVerticalStrut(25));
 
-        // ===== Card: Frage Editor =====
         JPanel addCard = createWhiteCard();
         addCard.setLayout(new BoxLayout(addCard, BoxLayout.Y_AXIS));
         addCard.setBorder(new EmptyBorder(30, 35, 30, 35));
@@ -80,7 +102,6 @@ public class Admin {
         addCard.add(cardTitle);
         addCard.add(Box.createVerticalStrut(20));
 
-        // --- FRAGETEXT ---
         addCard.add(smallSectionLabel("FRAGETEXT"));
         addCard.add(Box.createVerticalStrut(5));
 
@@ -96,7 +117,6 @@ public class Admin {
         addCard.add(questionArea);
         addCard.add(Box.createVerticalStrut(20));
 
-        // ===== Answers grid =====
         JPanel answersGrid = new JPanel(new GridLayout(2, 2, 20, 15));
         answersGrid.setOpaque(false);
         answersGrid.setMaximumSize(new Dimension(Integer.MAX_VALUE, 160));
@@ -114,7 +134,6 @@ public class Admin {
         addCard.add(answersGrid);
         addCard.add(Box.createVerticalStrut(20));
 
-        // Buttons Row (Save & Cancel)
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         btnRow.setOpaque(false);
 
@@ -139,7 +158,6 @@ public class Admin {
         contentBody.add(addCard);
         contentBody.add(Box.createVerticalStrut(30));
 
-        // ===== Card: Vorhandene Fragen =====
         JPanel listCard = createWhiteCard();
         listCard.setLayout(new BorderLayout());
         listCard.setBorder(new EmptyBorder(24, 28, 24, 28));
@@ -170,10 +188,8 @@ public class Admin {
 
         mainPanel.add(pageScroll, BorderLayout.CENTER);
 
-        refreshQuestionList(); // Load initial data
+        refreshQuestionList();
     }
-
-    // --- LOGIC ---
 
     private void saveQuestion() {
         String qText = questionArea.getText().trim();
@@ -184,15 +200,12 @@ public class Admin {
             JOptionPane.showMessageDialog(mainPanel, "Bitte alle Antworten ausfüllen."); return;
         }
 
-        // Logic: Answer A is always the correct one in the FORM
         String[] options = { ansA.getText().trim(), ansB.getText().trim(), ansC.getText().trim(), ansD.getText().trim() };
-        Question newQ = new Question(qText, options, 0); // 0 = A is correct
+        Question newQ = new Question(qText, options, 0);
 
         if (editingIndex == -1) {
-            // CREATE NEW
             DataManager.saveQuestion(newQ);
         } else {
-            // UPDATE EXISTING
             DataManager.updateQuestion(editingIndex, newQ);
             JOptionPane.showMessageDialog(mainPanel, "Frage aktualisiert!");
         }
@@ -203,19 +216,17 @@ public class Admin {
 
     private void editQuestion(int index, Question q) {
         this.editingIndex = index;
-        saveButton.setText("Aktualisieren"); // Change button text
-        saveButton.setBackground(new Color(13, 110, 253)); // Blue for Update
+        saveButton.setText("Aktualisieren");
+        saveButton.setBackground(new Color(13, 110, 253));
 
         questionArea.setForeground(Color.BLACK);
         questionArea.setText(q.getText());
 
-        // We need to put the CORRECT answer into Field A, and the rest in B, C, D
         String[] opts = q.getOptions();
         int correct = q.getCorrectIndex();
 
         setTextNoPlaceholder(ansA, opts[correct]);
 
-        // Fill B, C, D with the remaining options
         List<String> wrongAnswers = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             if (i != correct) wrongAnswers.add(opts[i]);
@@ -225,7 +236,6 @@ public class Admin {
         setTextNoPlaceholder(ansC, wrongAnswers.get(1));
         setTextNoPlaceholder(ansD, wrongAnswers.get(2));
 
-        // Scroll to top to see the edit form
         ((JScrollPane) mainPanel.getComponent(0)).getVerticalScrollBar().setValue(0);
     }
 
@@ -235,7 +245,7 @@ public class Admin {
 
         if (confirm == JOptionPane.YES_OPTION) {
             DataManager.deleteQuestion(index);
-            if (editingIndex == index) resetForm(); // If we were editing this one, cancel edit
+            if (editingIndex == index) resetForm();
             refreshQuestionList();
         }
     }
@@ -243,7 +253,7 @@ public class Admin {
     private void resetForm() {
         editingIndex = -1;
         saveButton.setText("Speichern");
-        saveButton.setBackground(new Color(25, 135, 84)); // Green for Save
+        saveButton.setBackground(new Color(25, 135, 84));
 
         clearInput(questionArea, "Geben Sie hier die Frage ein...");
         clearInput(ansA, "Richtige Antwort");
@@ -268,8 +278,6 @@ public class Admin {
         listBody.repaint();
     }
 
-    // --- UI HELPERS ---
-
     private JPanel createListRow(int index, Question q) {
         JPanel row = new JPanel(new BorderLayout());
         row.setBackground(Color.WHITE);
@@ -283,7 +291,6 @@ public class Admin {
         lbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
         lbl.setForeground(TEXT_DARK);
 
-        // Buttons Panel
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         actions.setOpaque(false);
 
@@ -335,7 +342,6 @@ public class Admin {
         JLabel l = new JLabel(text); l.setFont(new Font("SansSerif", Font.BOLD, 12)); l.setForeground(Color.GRAY); return l;
     }
 
-    // Placeholder Logic
     private void installPlaceholder(JTextComponent c, String p) {
         c.setText(p); c.setForeground(Color.GRAY);
         c.addFocusListener(new FocusAdapter() {
@@ -347,5 +353,9 @@ public class Admin {
     private void setTextNoPlaceholder(JTextComponent c, String t) { c.setText(t); c.setForeground(Color.BLACK); }
     private boolean isPlaceholder(JTextComponent c) { return c.getForeground().equals(Color.GRAY); }
 
+    /**
+     * Gibt das Haupt-Panel zurück.
+     * @return Das JPanel der Admin-Seite.
+     */
     public JPanel getMainPanel() { return mainPanel; }
 }

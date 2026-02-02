@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.quizapp"},{"l":"com.quizapp.data"},{"l":"com.quizapp.model"},{"l":"com.quizapp.view"},{"l":"com.quizapp.view.components"}];updateSearchResults();

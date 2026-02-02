@@ -10,23 +10,44 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+/**
+ * Die TimeMode-Klasse implementiert den zeitbasierten Spielmodus der Anwendung.
+ * <p>
+ * Im Gegensatz zum klassischen Quiz muss der Spieler hier gegen die Uhr antreten.
+ * Diese Klasse verwaltet:
+ * </p>
+ * <ul>
+ * <li>Den Countdown-Timer (20 Sekunden pro Frage) mit visueller Progress-Bar.</li>
+ * <li>Die dynamische Punktevergabe (Basis-Punkte + Bonus für verbleibende Sekunden).</li>
+ * <li>Die spezifischen Joker für diesen Modus (50:50 und Frage überspringen).</li>
+ * <li>Das automatische Beenden der Runde bei Zeitablauf.</li>
+ * </ul>
+ *
+ * @author Istiqlal Momand
+ * @author Helal Storany
+ * @version 1.0
+ */
 public class TimeMode {
     private final JPanel mainPanel;
     private final Runnable onBack;
 
-    private String currentUsername = "Gast"; // Default
+    private String currentUsername = "Gast"; // Standardwert
 
-    // --- COLORS ---
-    private static final Color ERROR_BG = new Color(255, 230, 230); // Light Red
-    private static final Color ERROR_BORDER = new Color(255, 100, 100); // Red
+    // --- FARB-DEFINITIONEN ---
+    private static final Color ERROR_BG = new Color(255, 230, 230); // Hellrot
+    private static final Color ERROR_BORDER = new Color(255, 100, 100); // Rot
     private static final Color HEADER_BG = new Color(13, 44, 94);
     private static final Color BG_COLOR   = new Color(250, 251, 252);
     private static final Color TEXT_DARK  = new Color(33, 37, 41);
     private static final Color CARD_SHADOW = new Color(230, 230, 230);
     private static final Color CARD_WHITE  = Color.WHITE;
+
+    // Timer Farben
     private static final Color TIMER_TRACK = new Color(230, 233, 238);
     private static final Color TIMER_FILL  = new Color(76, 120, 230);
     private static final Color TIMER_TEXT  = new Color(200, 60, 45);
+
+    // Feedback & Joker Farben
     private static final Color OK_BORDER   = new Color(76, 175, 80);
     private static final Color OK_BG       = new Color(233, 245, 234);
     private static final Color ALERT_BG    = new Color(250, 226, 226);
@@ -36,7 +57,7 @@ public class TimeMode {
     private static final Color SKIP_RING_TEAL = new Color(180, 240, 230);
     private static final Color SKIP_TEXT_TEAL = new Color(0, 150, 130);
 
-    // --- GAME STATE ---
+    // --- SPIELZUSTAND ---
     private List<Question> questions;
     private int questionIndex = 0;
     private int score = 0;
@@ -44,7 +65,7 @@ public class TimeMode {
     private boolean used5050 = false;
     private boolean acceptingAnswers = true;
 
-    // --- UI refs ---
+    // --- UI Referenzen ---
     private JLabel pointsValue;
     private JLabel questionCounterValue;
     private JProgressBar timerBar;
@@ -55,9 +76,14 @@ public class TimeMode {
     private javax.swing.Timer tickTimer;
     private long questionStartMs;
 
+    /**
+     * Erstellt die TimeMode-Ansicht und initialisiert die UI-Komponenten.
+     *
+     * @param onBack Callback-Funktion für die Rückkehr zum Hauptmenü.
+     */
     public TimeMode(Runnable onBack) {
         this.onBack = onBack;
-        // Load data but DO NOT start yet
+        // Daten laden, aber Spiel noch NICHT starten
         DataManager.ensureQuestionsExist();
         this.questions = DataManager.loadQuestions();
 
@@ -97,14 +123,22 @@ public class TimeMode {
         mainPanel.add(pageScroll, BorderLayout.CENTER);
     }
 
-    //  Picks 10 random questions instead of ALL of them
+    /**
+     * Startet eine neue Spielrunde im Zeitmodus.
+     * <p>
+     * Wählt zufällig 10 Fragen aus dem Pool aus, setzt den Punktestand zurück
+     * und startet den Ablauf der ersten Frage.
+     * </p>
+     *
+     * @param username Der Name des aktuellen Spielers.
+     */
     public void startGame(String username) {
         this.currentUsername = username;
         this.score = 0;
         this.questionIndex = 0;
         this.used5050 = false;
 
-        // 1. Load ALL questions from JSON
+        // 1. Alle Fragen laden
         List<Question> allQuestions = DataManager.loadQuestions();
 
         if (allQuestions.isEmpty()) {
@@ -113,15 +147,17 @@ public class TimeMode {
             return;
         }
 
-        // 2. Shuffle them to randomize the order
+        // 2. Zufälliges Mischen (Shuffle)
         java.util.Collections.shuffle(allQuestions);
 
-        // 3. Select only the first 10 (or less if we don't have 10 yet)
+        // 3. Nur die ersten 10 Fragen auswählen
         int limit = Math.min(allQuestions.size(), 10);
         this.questions = allQuestions.subList(0, limit);
 
         loadQuestion(0);
     }
+
+    // --- UI BUILDER METHODEN ---
 
     private JPanel buildStatusBar() {
         JPanel bar = new JPanel(new BorderLayout());
@@ -258,6 +294,8 @@ public class TimeMode {
         return panel;
     }
 
+    // --- LOGIC ---
+
     private void loadQuestion(int index) {
         questionIndex = index;
         if (index >= questions.size()) return;
@@ -278,10 +316,20 @@ public class TimeMode {
         startTimer();
     }
 
+    /**
+     * Stoppt den laufenden Timer für die aktuelle Frage.
+     */
     private void stopTimer() {
         if (tickTimer != null && tickTimer.isRunning()) tickTimer.stop();
     }
 
+    /**
+     * Startet den Countdown-Timer für die aktuelle Frage.
+     * <p>
+     * Ein {@link javax.swing.Timer} aktualisiert alle 50ms die Progress-Bar und
+     * das Textlabel. Wenn die Zeit abläuft, wird {@link #onTimeExpired()} aufgerufen.
+     * </p>
+     */
     private void startTimer() {
         stopTimer();
         timerBar.setMaximum(SECONDS_PER_QUESTION * 1000);
@@ -304,6 +352,10 @@ public class TimeMode {
         tickTimer.start();
     }
 
+    /**
+     * Wird aufgerufen, wenn der Timer 0 erreicht.
+     * Deaktiviert Eingaben, zeigt die Lösung und erzwingt den Wechsel zur nächsten Frage.
+     */
     private void onTimeExpired() {
         stopTimer();
         if (!acceptingAnswers) return;
@@ -317,6 +369,15 @@ public class TimeMode {
         startDelayTransition(1500);
     }
 
+    /**
+     * Verarbeitet den Klick auf eine Antwort.
+     * <p>
+     * Berechnet die Punkte basierend auf der verbleibenden Zeit:
+     * {@code 10 Basispunkte + verbleibende Sekunden}.
+     * </p>
+     *
+     * @param idx Index der gewählten Antwort.
+     */
     private void onAnswerClicked(int idx) {
         if (!acceptingAnswers) return;
         stopTimer();
@@ -324,17 +385,17 @@ public class TimeMode {
         Question q = questions.get(questionIndex);
 
         if (idx == q.getCorrectIndex()) {
-            // Correct Answer Logic
+            // Richtige Antwort: Punkteberechnung
             int remainingSec = (int)(timerBar.getValue() / 1000);
             int earned = 10 + remainingSec;
             score += earned;
             pointsValue.setText(String.valueOf(score));
         } else {
-            // Wrong Answer Logic -> Turn Red
+            // Falsche Antwort: Rot markieren
             answerOptions[idx].setState(AnswerOption.State.WRONG);
         }
 
-        // Always show Correct Answer in Green
+        // Richtige Antwort immer Grün anzeigen
         answerOptions[q.getCorrectIndex()].setState(AnswerOption.State.CORRECT);
 
         for (int i = 0; i < 4; i++) {
@@ -376,6 +437,10 @@ public class TimeMode {
         }
     }
 
+    /**
+     * Gibt das Haupt-Panel zurück.
+     * @return Das JPanel der TimeMode-Seite.
+     */
     public JPanel getMainPanel() { return mainPanel; }
 
     static class CircularButton extends JPanel {

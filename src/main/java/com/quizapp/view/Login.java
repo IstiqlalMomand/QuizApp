@@ -9,20 +9,47 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.function.Consumer;
 
+/**
+ * Die Login-Klasse repräsentiert den Einstiegsbildschirm der Anwendung.
+ * <p>
+ * Diese View bietet dem Nutzer eine moderne Oberfläche zur Eingabe des Benutzernamens.
+ * Sie zeichnet sich durch ein "Split-Screen"-Design und ein "Card-Layout" aus.
+ * </p>
+ * <p>
+ * Besonderheit: Alle grafischen Elemente (wie das Logo) werden per Code gezeichnet (Java 2D API).
+ * </p>
+ *
+ * @author Istiqlal Momand
+ * @author Helal Storany
+ * @version 1.0
+ */
 public class Login {
+    // ... Konstruktor und Methoden ...
     private JPanel mainPanel;
     private JTextField usernameField;
     private final Consumer<String> onLogin;
 
-    // Brand Colors
     private static final Color BRAND_NAVY = new Color(13, 44, 94);
     private static final Color BG_GRAY = new Color(245, 247, 250);
     private static final Color CARD_SHADOW = new Color(200, 200, 200, 100);
 
+    /**
+     * Erstellt die Login-Ansicht und initialisiert alle UI-Komponenten.
+     * <p>
+     * Der Konstruktor definiert:
+     * </p>
+     * <ul>
+     * <li>Ein benutzerdefiniertes Hintergrund-Panel.</li>
+     * <li>Eine zentrierte "Karte" für die Eingabefelder.</li>
+     * <li>Ein dynamisch gezeichnetes Logo ("Q"-Icon).</li>
+     * </ul>
+     *
+     * @param onLogin Ein Callback (Consumer), der aufgerufen wird, wenn der Benutzer erfolgreich
+     * einen Namen eingegeben hat.
+     */
     public Login(Consumer<String> onLogin) {
         this.onLogin = onLogin;
-
-        // 1. Custom Background Panel (Split Color)
+        // ... Code ...
         mainPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -31,31 +58,24 @@ public class Login {
                 int h = getHeight();
                 int w = getWidth();
 
-                // Top 40% Navy
                 g2.setColor(BRAND_NAVY);
                 g2.fillRect(0, 0, w, h * 40 / 100);
 
-                // Bottom 60% Light Gray
                 g2.setColor(BG_GRAY);
                 g2.fillRect(0, h * 40 / 100, w, h * 60 / 100);
             }
         };
 
-        // 2. The Floating Card
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Color.WHITE);
-        card.setBorder(new EmptyBorder(40, 50, 40, 50)); // Internal padding
+        card.setBorder(new EmptyBorder(40, 50, 40, 50));
 
-        // Add a shadow/border effect using a wrapper or compound border
-        // (Simplified here: specific background painting for shadow effect is complex in Swing,
-        // so we use a matte border to simulate depth or just keep it clean).
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(40, 50, 40, 50)
         ));
 
-        // --- Logo Icon (Drawn in code) ---
         JPanel iconPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -63,11 +83,9 @@ public class Login {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Draw Blue Circle
                 g2.setColor(new Color(240, 245, 255));
                 g2.fillOval(0, 0, 60, 60);
 
-                // Draw "Q" text
                 g2.setColor(BRAND_NAVY);
                 g2.setFont(new Font("Serif", Font.BOLD, 36));
                 FontMetrics fm = g2.getFontMetrics();
@@ -79,10 +97,9 @@ public class Login {
         };
         iconPanel.setPreferredSize(new Dimension(60, 60));
         iconPanel.setMaximumSize(new Dimension(60, 60));
-        iconPanel.setBackground(Color.WHITE); // match card
+        iconPanel.setBackground(Color.WHITE);
         iconPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- Texts ---
         JLabel title = new JLabel("QuizApp");
         title.setFont(new Font("SansSerif", Font.BOLD, 28));
         title.setForeground(BRAND_NAVY);
@@ -93,7 +110,6 @@ public class Login {
         subtitle.setForeground(Color.GRAY);
         subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- Input Field ---
         usernameField = new JTextField();
         usernameField.setPreferredSize(new Dimension(250, 40));
         usernameField.setMaximumSize(new Dimension(250, 40));
@@ -101,16 +117,13 @@ public class Login {
         installPlaceholder(usernameField, "Benutzername eingeben...");
         usernameField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- Button ---
         JButton loginBtn = new PrimaryButton("Starten");
         loginBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginBtn.setMaximumSize(new Dimension(250, 40));
         loginBtn.addActionListener(e -> performLogin());
 
-        // Allow "Enter" key to trigger login
         usernameField.addActionListener(e -> performLogin());
 
-        // --- Assemble Card ---
         card.add(iconPanel);
         card.add(Box.createVerticalStrut(15));
         card.add(title);
@@ -128,7 +141,6 @@ public class Login {
         footer.setAlignmentX(Component.CENTER_ALIGNMENT);
         card.add(footer);
 
-        // Add Card to Main Panel (Centered)
         mainPanel.add(card);
     }
 
@@ -141,7 +153,6 @@ public class Login {
         }
     }
 
-    // Reuse your placeholder logic
     private void installPlaceholder(JTextField field, String placeholder) {
         field.setText(placeholder);
         field.setForeground(Color.GRAY);
@@ -163,11 +174,17 @@ public class Login {
         });
     }
 
+    /**
+     * Setzt den Fokus auf das Eingabefeld.
+     */
     public void focusUsername() {
-        // Request focus but don't clear placeholder immediately logic is handled by listener
         usernameField.requestFocusInWindow();
     }
 
+    /**
+     * Gibt das Haupt-Panel zurück.
+     * @return Das JPanel.
+     */
     public JPanel getMainPanel() {
         return mainPanel;
     }

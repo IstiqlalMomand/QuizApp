@@ -11,77 +11,88 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+/**
+ * Die Quiz-Klasse repräsentiert die eigentliche Spieloberfläche für den klassischen Modus.
+ * <p>
+ * Sie steuert den gesamten Spielablauf einer Runde, einschließlich:
+ * </p>
+ * <ul>
+ * <li>Auswahl von 10 zufälligen Fragen aus dem Datenbestand.</li>
+ * <li>Darstellung der Fragen und Antwortmöglichkeiten.</li>
+ * <li>Validierung der Benutzereingaben mit visuellem Feedback (Grün/Rot).</li>
+ * <li>Verwaltung der Joker (50:50, Überspringen).</li>
+ * <li>Speicherung des Endergebnisses via {@link DataManager}.</li>
+ * </ul>
+ *
+ * @author Istiqlal Momand
+ * @author Helal Storany
+ * @version 1.0
+ */
 public class Quiz {
+    // ... (Code unverändert, aber @return bei getMainPanel hinzufügen) ...
     private final JPanel mainPanel;
     private final Runnable onBackToMenu;
 
     private String currentUsername = "Gast";
 
-    // --- COLORS ---
     private static final Color HEADER_BG = new Color(13, 44, 94);
     private static final Color BG_COLOR = new Color(250, 251, 252);
     private static final Color TEXT_DARK = new Color(33, 37, 41);
     private static final Color CARD_SHADOW = new Color(230, 230, 230);
     private static final Color CARD_WHITE  = Color.WHITE;
 
-    // Feedback Colors
     private static final Color OK_BORDER   = new Color(76, 175, 80);
     private static final Color OK_BG       = new Color(233, 245, 234);
     private static final Color ERROR_BG    = new Color(255, 230, 230);
     private static final Color ERROR_BORDER = new Color(255, 100, 100);
 
-    // Joker colors
     private static final Color JOKER_RING_PURPLE = new Color(225, 200, 255);
     private static final Color JOKER_TEXT_PURPLE = new Color(120, 50, 180);
     private static final Color SKIP_RING_TEAL = new Color(180, 240, 230);
     private static final Color SKIP_TEXT_TEAL = new Color(0, 150, 130);
 
-    // --- GAME STATE ---
     private List<Question> questions;
     private int questionIndex = 0;
     private int score = 0;
     private boolean used5050 = false;
     private boolean acceptingAnswers = true;
 
-    // --- UI Components ---
     private JLabel scoreLabel;
     private JLabel questionCounterLabel;
     private JLabel questionTextLabel;
     private final AnswerButton[] answerButtons = new AnswerButton[4];
 
+    /**
+     * Erstellt die Quiz-Ansicht und baut die grafische Oberfläche auf.
+     *
+     * @param onBackToMenu Callback-Funktion, um nach Spielende zum Hauptmenü zurückzukehren.
+     */
     public Quiz(Runnable onBackToMenu) {
         this.onBackToMenu = onBackToMenu;
 
-        // Load data initially (will be reloaded on startGame)
         DataManager.ensureQuestionsExist();
         this.questions = DataManager.loadQuestions();
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
 
-        // --- CONTENT LAYOUT ---
         JPanel contentBody = new JPanel();
         contentBody.setLayout(new BoxLayout(contentBody, BoxLayout.Y_AXIS));
         contentBody.setBackground(BG_COLOR);
         contentBody.setBorder(new EmptyBorder(0, 0, 40, 0));
 
-        // 1. Stats Bar
         contentBody.add(buildStatsBar());
         contentBody.add(Box.createVerticalStrut(40));
 
-        // 2. Question Card
         contentBody.add(buildQuestionCard());
         contentBody.add(Box.createVerticalStrut(30));
 
-        // 3. Answer Grid
         contentBody.add(buildAnswersGrid());
         contentBody.add(Box.createVerticalStrut(40));
 
-        // 4. Jokers
         contentBody.add(buildJokerPanel());
         contentBody.add(Box.createVerticalStrut(25));
 
-        // 5. Back Button
         JPanel backWrap = new JPanel(new FlowLayout(FlowLayout.CENTER));
         backWrap.setOpaque(false);
         JButton backBtn = new PrimaryButton("Zurück");
@@ -89,7 +100,6 @@ public class Quiz {
         backWrap.add(backBtn);
         contentBody.add(backWrap);
 
-        // Scroll Wrapper
         JScrollPane scroll = new JScrollPane(contentBody);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
@@ -98,14 +108,17 @@ public class Quiz {
         mainPanel.add(scroll, BorderLayout.CENTER);
     }
 
-    // ✅ NEW: Picks 10 random questions instead of ALL of them
+    /**
+     * Startet eine neue Spielrunde.
+     *
+     * @param username Der Name des Spielers für die Highscore-Speicherung.
+     */
     public void startGame(String username) {
         this.currentUsername = username;
         this.score = 0;
         this.questionIndex = 0;
         this.used5050 = false;
 
-        // 1. Load ALL questions
         List<Question> allQuestions = DataManager.loadQuestions();
 
         if (allQuestions.isEmpty()) {
@@ -114,10 +127,8 @@ public class Quiz {
             return;
         }
 
-        // 2. Shuffle them to randomize the order
         java.util.Collections.shuffle(allQuestions);
 
-        // 3. Select only the first 10 (or less if we don't have 10 yet)
         int limit = Math.min(allQuestions.size(), 10);
         this.questions = allQuestions.subList(0, limit);
 
@@ -149,23 +160,20 @@ public class Quiz {
         Question q = questions.get(questionIndex);
 
         if (idx == q.getCorrectIndex()) {
-            score += 10; // Fixed points for classic mode
+            score += 10;
             scoreLabel.setText(String.valueOf(score));
         } else {
             answerButtons[idx].setState(AnswerButton.State.WRONG);
         }
 
-        // Show correct answer
         answerButtons[q.getCorrectIndex()].setState(AnswerButton.State.CORRECT);
 
-        // Disable others
         for (int i = 0; i < 4; i++) {
             if (i != q.getCorrectIndex() && i != idx) {
                 answerButtons[i].setEnabledLook(false);
             }
         }
 
-        // Delay next question
         Timer t = new Timer(1500, e -> {
             ((Timer)e.getSource()).stop();
             nextQuestion();
@@ -195,8 +203,6 @@ public class Quiz {
             }
         }
     }
-
-    // --- UI BUILDERS ---
 
     private JPanel buildStatsBar() {
         JPanel statsBar = new JPanel(new BorderLayout());
@@ -314,9 +320,11 @@ public class Quiz {
         return panel;
     }
 
+    /**
+     * Gibt das Hauptpanel zurück.
+     * @return Das Panel.
+     */
     public JPanel getMainPanel() { return mainPanel; }
-
-    // --- NESTED CLASSES ---
 
     static class CircularButton extends JPanel {
         private boolean enabledLook = true;

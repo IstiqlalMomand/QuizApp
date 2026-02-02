@@ -10,6 +10,18 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Die Highscores-Klasse ist für die Anzeige der globalen Bestenliste zuständig.
+ * <p>
+ * Sie präsentiert die gespeicherten Spielergebnisse in einer stilisierten Tabelle ({@link JTable}).
+ * Die Klasse kümmert sich um das Laden der Daten über den {@link DataManager},
+ * die Sortierung der Einträge nach Punktzahl und das visuelle Styling der Tabellenzellen.
+ * </p>
+ *
+ * @author Istiqlal Momand
+ * @author Helal Storany
+ * @version 1.0
+ */
 public class Highscores {
     private final JPanel mainPanel;
     private final Runnable onBack;
@@ -19,6 +31,11 @@ public class Highscores {
     private static final Color TEXT_DARK = new Color(33, 37, 41);
     private static final Color TABLE_HEADER_BG = new Color(245, 247, 250);
 
+    /**
+     * Erstellt die Highscore-Ansicht und initialisiert das UI-Layout.
+     *
+     * @param onBack Callback-Funktion für den "Zurück"-Button.
+     */
     public Highscores(Runnable onBack) {
         this.onBack = onBack;
 
@@ -152,6 +169,18 @@ public class Highscores {
         mainPanel.add(pageScroll, BorderLayout.CENTER);
     }
 
+    /**
+     * Lädt die aktuellen Highscore-Daten neu und aktualisiert die Tabelle.
+     * <p>
+     * Diese Methode:
+     * </p>
+     * <ol>
+     * <li>Leert das aktuelle Tabellenmodell.</li>
+     * <li>Lädt die Liste aller Einträge vom {@link DataManager}.</li>
+     * <li>Sortiert die Liste absteigend nach Punkten (Höchster Score zuerst).</li>
+     * <li>Fügt die sortierten Einträge zeilenweise der Tabelle hinzu.</li>
+     * </ol>
+     */
     public void refresh() {
         tableModel.setRowCount(0);
         List<HighscoreEntry> entries = DataManager.loadHighscores();
@@ -171,5 +200,10 @@ public class Highscores {
         }
     }
 
+    /**
+     * Gibt das Haupt-Panel zurück.
+     *
+     * @return Das JPanel für das CardLayout.
+     */
     public JPanel getMainPanel() { return mainPanel; }
 }

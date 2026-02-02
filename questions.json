@@ -2,12 +2,12 @@
   {
     "text": "Welcher Datentyp speichert Text in Java?",
     "options": [
-      "int",
       "String",
+      "int",
       "boolean",
       "char"
     ],
-    "correctIndex": 1
+    "correctIndex": 0
   },
   {
     "text": "Wie beendet man eine Schleife vorzeitig?",
@@ -992,11 +992,11 @@
   {
     "text": "Was ist Big Data?",
     "options": [
-      "Eine große Datei",
       "Verarbeitung riesiger Datenmengen",
+      "Eine große Datei",
       "Ein großer Server",
       "Ein langes Kabel"
     ],
-    "correctIndex": 1
+    "correctIndex": 0
   }
 ]
