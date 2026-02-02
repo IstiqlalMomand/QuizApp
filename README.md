@@ -85,6 +85,31 @@ mvn test
 3. **Integration Test:**
    - Verifies that questions can be saved to and loaded from the JSON file system.
 ---
+## 📚 Documentation
+
+Complete **Javadoc** documentation has been generated for the entire project, covering all classes, methods, and architectural details.
+
+---
+
+## 🔍 How to View the Documentation
+
+The documentation is located in the `docs/` directory in the project root.
+
+### Steps
+
+1. Navigate to the `docs/` folder.
+2. Open the `index.html` file in your web browser.
+
+---
+
+###  via Terminal
+
+Alternatively, you can open the documentation directly using the terminal:
+
+```bash
+open docs/index.html
+```
+---
 ## 📁 Project Structure
 
 ```text
