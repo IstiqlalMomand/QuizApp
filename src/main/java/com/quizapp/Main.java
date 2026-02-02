@@ -1,5 +1,6 @@
 package com.quizapp;
 
+import com.quizapp.data.DataManager;
 import com.quizapp.view.components.HeaderBar;
 import com.quizapp.view.*;
 
@@ -32,6 +33,12 @@ public class Main {
      * @param args Kommandozeilenargumente (werden in dieser Anwendung nicht verwendet).
      */
     public static void main(String[] args) {
+        // Daten-Initialisierung VOR dem Start der UI
+        // 1. Sicherstellen, dass Fragen existieren
+        DataManager.ensureQuestionsExist();
+        // 2. Sicherstellen, dass Dummy-Highscores existieren (Anforderung 1c)
+        DataManager.ensureHighscoresExist();
+
         SwingUtilities.invokeLater(() -> {
             // Initialisierung des Hauptfensters
             JFrame frame = new JFrame("QuizApp");
